@@ -16,7 +16,7 @@ class RolePermissionSeeder extends Seeder
         // Reset cached roles and permissions
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // Create permissions
+        // Existing permission set (granular permissions can be appended here later)
         $permissions = [
             // Complaints permissions
             'view complaints',
@@ -45,23 +45,34 @@ class RolePermissionSeeder extends Seeder
             'view dashboard',
         ];
 
+        // Create permissions idempotently
         foreach ($permissions as $permission) {
-            Permission::create(['name' => $permission, 'guard_name' => 'web']);
+            Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Create Super Admin role
-        $superAdmin = Role::create(['name' => 'Super Admin', 'guard_name' => 'web']);
-        $superAdmin->givePermissionTo(Permission::all()); // Give all permissions
+        // Create roles idempotently
+        $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
+        $admin = Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
 
-        // Create Admin role
-        $admin = Role::create(['name' => 'Admin', 'guard_name' => 'web']);
-        // Admin can only view and update complaints, view dashboard, view complaint types
-        $admin->givePermissionTo([
-            'view complaints',
-            'update complaint status',
-            'view complaint types',
-            'view dashboard',
-        ]);
+        // Map roles to permissions (extend here to add more roles or granular sets)
+        $roleToPermissions = [
+            'Super Admin' => Permission::all()->pluck('name')->all(), // all permissions
+            'Admin' => [
+                'view complaints',
+                'update complaint status',
+                'view complaint types',
+                'view dashboard',
+            ],
+        ];
+
+        // Sync permissions to roles
+        foreach ($roleToPermissions as $roleName => $permissionNames) {
+            $role = Role::findByName($roleName, 'web');
+            $role->syncPermissions($permissionNames);
+        }
+
+        // Refresh cache
+        app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
     }
 }
 
