@@ -26,4 +26,12 @@ class ComplaintType extends Model
         'description',
     ];
 
+    /**
+     * Get the complaints for this complaint type.
+     */
+    public function complaints()
+    {
+        return $this->hasMany(Complaint::class, 'complaint_type_id');
+    }
 }
+

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Spatie\Permission\Models\Role;
@@ -34,6 +36,19 @@ class AdminUserController extends Controller
 			'password' => ['required', 'string', 'min:8'],
 			'position' => ['nullable', 'string', 'max:100'],
 			'role' => ['required', Rule::in(['Super Admin', 'Admin'])],
+		], [
+			'name.required' => 'Nama diperlukan.',
+			'name.max' => 'Nama tidak boleh melebihi 100 aksara.',
+			'email.required' => 'Emel diperlukan.',
+			'email.email' => 'Format emel tidak sah.',
+			'email.unique' => 'Emel ini sudah digunakan.',
+			'email.max' => 'Emel tidak boleh melebihi 150 aksara.',
+			'password.required' => 'Kata laluan diperlukan.',
+			'password.min' => 'Kata laluan mestilah sekurang-kurangnya 8 aksara.',
+			'phone_number.max' => 'Nombor telefon tidak boleh melebihi 20 aksara.',
+			'position.max' => 'Jawatan tidak boleh melebihi 100 aksara.',
+			'role.required' => 'Peranan diperlukan.',
+			'role.in' => 'Peranan yang dipilih tidak sah.',
 		]);
 
 		$user = new User();
@@ -46,7 +61,7 @@ class AdminUserController extends Controller
 
 		$user->syncRoles([$validated['role']]);
 
-		return redirect()->route('admin.admins.index')->with('status', 'Admin created');
+		return redirect()->route('admin.admins.index')->with('success', 'Admin berjaya dicipta.');
 	}
 
 	public function edit(User $admin)
@@ -64,6 +79,18 @@ class AdminUserController extends Controller
 			'password' => ['nullable', 'string', 'min:8'],
 			'position' => ['nullable', 'string', 'max:100'],
 			'role' => ['required', Rule::in(['Super Admin', 'Admin'])],
+		], [
+			'name.required' => 'Nama diperlukan.',
+			'name.max' => 'Nama tidak boleh melebihi 100 aksara.',
+			'email.required' => 'Emel diperlukan.',
+			'email.email' => 'Format emel tidak sah.',
+			'email.unique' => 'Emel ini sudah digunakan.',
+			'email.max' => 'Emel tidak boleh melebihi 150 aksara.',
+			'password.min' => 'Kata laluan mestilah sekurang-kurangnya 8 aksara.',
+			'phone_number.max' => 'Nombor telefon tidak boleh melebihi 20 aksara.',
+			'position.max' => 'Jawatan tidak boleh melebihi 100 aksara.',
+			'role.required' => 'Peranan diperlukan.',
+			'role.in' => 'Peranan yang dipilih tidak sah.',
 		]);
 
 		$admin->name = $validated['name'];
@@ -77,13 +104,34 @@ class AdminUserController extends Controller
 
 		$admin->syncRoles([$validated['role']]);
 
-		return redirect()->route('admin.admins.index')->with('status', 'Admin updated');
+		return redirect()->route('admin.admins.index')->with('success', 'Admin berjaya dikemaskini.');
 	}
 
-	public function destroy(User $admin): RedirectResponse
+	public function destroy(User $admin): RedirectResponse|JsonResponse
 	{
+		// Prevent deleting the currently logged-in user
+		$currentUser = Auth::user();
+		if ($currentUser && $admin->id === $currentUser->id) {
+			if (request()->ajax() || request()->wantsJson()) {
+				return response()->json([
+					'success' => false,
+					'message' => 'Anda tidak boleh memadam akaun anda sendiri.'
+				], 422);
+			}
+			return redirect()->route('admin.admins.index')
+				->with('error', 'Anda tidak boleh memadam akaun anda sendiri.');
+		}
+
 		$admin->delete();
-		return redirect()->route('admin.admins.index')->with('status', 'Admin deleted');
+
+		if (request()->ajax() || request()->wantsJson()) {
+			return response()->json([
+				'success' => true,
+				'message' => 'Admin berjaya dipadam.'
+			]);
+		}
+
+		return redirect()->route('admin.admins.index')->with('success', 'Admin berjaya dipadam.');
 	}
 
 	public function editPermissions(User $admin)
@@ -101,6 +149,9 @@ class AdminUserController extends Controller
 			'role' => ['required', Rule::in(['Super Admin', 'Admin'])],
 			'permissions' => ['array'],
 			'permissions.*' => ['string'],
+		], [
+			'role.required' => 'Peranan diperlukan.',
+			'role.in' => 'Peranan yang dipilih tidak sah.',
 		]);
 
 		$role = $validated['role'];
@@ -113,6 +164,6 @@ class AdminUserController extends Controller
 			$admin->syncPermissions($validated['permissions'] ?? []);
 		}
 
-		return redirect()->route('admin.admins.index')->with('status', 'Peranan & izin dikemaskini');
+		return redirect()->route('admin.admins.index')->with('success', 'Peranan & izin berjaya dikemaskini.');
 	}
 }

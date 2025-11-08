@@ -52,4 +52,31 @@
 			<a href="{{ route('admin.admins.index') }}" class="text-sm">Batal</a>
 		</div>
 	</form>
+
+	@push('scripts')
+	<script>
+		// Show success/error messages from session
+		@if (session('success'))
+			Swal.fire({
+				icon: 'success',
+				title: 'Berjaya!',
+				text: '{{ session('success') }}',
+				confirmButtonColor: '#4f46e5',
+				timer: 3000,
+				timerProgressBar: true
+			}).then(() => {
+				window.location.href = '{{ route('admin.admins.index') }}';
+			});
+		@endif
+
+		@if ($errors->any())
+			Swal.fire({
+				icon: 'error',
+				title: 'Ralat Pengesahan!',
+				html: '<ul class="text-left list-disc list-inside">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
+				confirmButtonColor: '#dc2626'
+			});
+		@endif
+	</script>
+	@endpush
 @endsection

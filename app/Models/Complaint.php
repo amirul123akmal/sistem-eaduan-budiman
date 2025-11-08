@@ -32,6 +32,32 @@ class Complaint extends Model
         'admin_comment',
     ];
 
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'image_path' => 'array',
+    ];
+
+    /**
+     * Get the image paths as an array.
+     * Returns empty array if null or empty.
+     */
+    public function getImagesAttribute(): array
+    {
+        return $this->image_path ?? [];
+    }
+
+    /**
+     * Check if complaint has images.
+     */
+    public function hasImages(): bool
+    {
+        return !empty($this->image_path) && is_array($this->image_path) && count($this->image_path) > 0;
+    }
+
     // --- Relationships ---
 
     /**
@@ -52,3 +78,4 @@ class Complaint extends Model
         return $this->hasMany(ComplaintStatusLog::class, 'complaint_id');
     }
 }
+

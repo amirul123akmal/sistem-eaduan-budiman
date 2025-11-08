@@ -3,8 +3,11 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="csrf-token" content="{{ csrf_token() }}">
 	<title>{{ config('app.name', 'e-Aduan Budiman') }} — Admin</title>
 	@vite(['resources/css/app.css', 'resources/js/app.js'])
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.46.0/dist/apexcharts.min.js"></script>
 </head>
 <body class="bg-gray-50 text-gray-900">
 	@php($user = auth()->user())
@@ -19,5 +22,6 @@
 			@yield('content')
 		</main>
 	</div>
+	@stack('scripts')
 </body>
 </html>
