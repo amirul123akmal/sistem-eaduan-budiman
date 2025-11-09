@@ -5,11 +5,17 @@
 				<span class="sr-only">Open sidebar</span>
 				<svg class="h-6 w-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5h14a1 1 0 100-2H3a1 1 0 100 2zm14 4H3a1 1 0 000 2h14a1 1 0 100-2zm0 6H3a1 1 0 000 2h14a1 1 0 100-2z" clip-rule="evenodd"/></svg>
 			</button>
-			<a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2 text-gray-900">
+			@php
+				$user = auth()->user();
+				$dashboardRoute = ($user && method_exists($user, 'hasRole') && $user->hasRole('Super Admin')) 
+					? route('admin.dashboard') 
+					: route('admin.panel.dashboard');
+			@endphp
+			<a href="{{ $dashboardRoute }}" class="flex items-center gap-2 text-gray-900">
 				<svg class="h-6 w-6 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
 				</svg>
-				<span class="text-base font-semibold">e-Aduan Budiman</span>
+				<span class="text-base font-semibold">e-Aduan Kg-Budiman</span>
 			</a>
 		</div>
 		<div class="hidden flex-1 items-center justify-center px-6 lg:flex">
@@ -30,10 +36,49 @@
 				@endif
 				<span class="hidden text-sm font-medium text-gray-700 sm:inline">{{ $authUser?->name }}</span>
 			</div>
-			<form method="POST" action="{{ route('logout') }}">
+			<form method="POST" action="{{ route('logout') }}" id="logoutForm">
 				@csrf
-				<button class="rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">Log keluar</button>
+				<button type="submit" class="rounded-md bg-gray-900 px-3 py-2 text-xs font-medium text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">Log keluar</button>
 			</form>
 		</div>
 	</div>
 </header>
+
+@push('scripts')
+<script>
+	// Handle logout confirmation with SweetAlert2
+	document.getElementById('logoutForm')?.addEventListener('submit', function(e) {
+		e.preventDefault();
+		
+		const form = this;
+		
+		Swal.fire({
+			title: 'Adakah anda pasti?',
+			text: 'Anda akan log keluar dari sistem.',
+			icon: 'question',
+			showCancelButton: true,
+			confirmButtonColor: '#dc2626',
+			cancelButtonColor: '#6b7280',
+			confirmButtonText: 'Ya, log keluar',
+			cancelButtonText: 'Batal',
+			reverseButtons: true
+		}).then((result) => {
+			if (result.isConfirmed) {
+				// Show loading
+				Swal.fire({
+					title: 'Memproses...',
+					text: 'Sila tunggu',
+					allowOutsideClick: false,
+					allowEscapeKey: false,
+					didOpen: () => {
+						Swal.showLoading();
+					}
+				});
+				
+				// Submit form
+				form.submit();
+			}
+		});
+	});
+</script>
+@endpush
