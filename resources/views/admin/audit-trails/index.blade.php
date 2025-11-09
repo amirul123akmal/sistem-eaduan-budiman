@@ -28,13 +28,13 @@
 			<div>
 				<label class="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
 					<svg class="h-4 w-4 text-[#132A13]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
-					Cari (Nama Admin)
+					Cari
 				</label>
 				<div class="relative">
 					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 						<svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
 					</div>
-					<input type="text" name="search" value="{{ request('search') }}" placeholder="Nama admin..." class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 text-sm shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 transition-all">
+					<input type="text" name="search" value="{{ request('search') }}" placeholder="Nama admin, nama aduan, telefon, atau komen..." class="w-full pl-10 pr-4 py-3 rounded-xl border-2 border-gray-200 text-sm shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 transition-all">
 				</div>
 			</div>
 			<div>
@@ -46,7 +46,7 @@
 					<select name="status" class="w-full appearance-none rounded-xl border-2 border-gray-200 bg-white px-4 py-3 pr-10 text-sm shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 transition-all">
 						<option value="">Semua Status</option>
 						@foreach($statuses as $status)
-							<option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>
+							<option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
 								{{ ucfirst($status) }}
 							</option>
 						@endforeach
@@ -59,9 +59,9 @@
 			<div>
 				<label class="mb-2 block text-sm font-semibold text-gray-700 flex items-center gap-2">
 					<svg class="h-4 w-4 text-[#132A13]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
-					ID Aduan
+					ID Aduan / Public ID
 				</label>
-				<input type="number" name="complaint_id" value="{{ request('complaint_id') }}" placeholder="ID Aduan..." class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 text-sm shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 transition-all">
+				<input type="text" name="complaint_id" value="{{ request('complaint_id') }}" placeholder="ID Aduan atau Public ID..." class="w-full px-4 py-3 rounded-xl border-2 border-gray-200 text-sm shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 transition-all">
 			</div>
 			<div class="flex items-end gap-2">
 				<button type="submit" class="group relative overflow-hidden flex-1 rounded-xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] px-4 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] transform">

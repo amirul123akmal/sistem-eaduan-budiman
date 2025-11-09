@@ -43,7 +43,7 @@
 					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 						<svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
 					</div>
-					<input type="text" name="search" value="{{ request('search') }}" placeholder="Nama, telefon, atau penerangan..." class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all">
+					<input type="text" name="search" value="{{ request('search') }}" placeholder="ID Aduan, Nama, Telefon, Emel, atau Penerangan..." class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all">
 				</div>
 			</div>
 			<div>
@@ -55,7 +55,7 @@
 					<select name="status" class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all appearance-none cursor-pointer">
 						<option value="">Semua Status</option>
 						@foreach($statuses as $status)
-							<option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>
+							<option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
 								{{ ucfirst($status) }}
 							</option>
 						@endforeach
@@ -71,7 +71,7 @@
 					<select name="complaint_type_id" class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all appearance-none cursor-pointer">
 						<option value="">Semua Jenis</option>
 						@foreach($complaintTypes as $type)
-							<option value="{{ $type->id }}" {{ request('complaint_type_id') == $type->id ? 'selected' : '' }}>
+							<option value="{{ $type->id }}" {{ (string)request('complaint_type_id') === (string)$type->id ? 'selected' : '' }}>
 								{{ $type->type_name }}
 							</option>
 						@endforeach
@@ -98,7 +98,7 @@
 			<table class="min-w-full divide-y divide-gray-200">
 				<thead class="bg-gradient-to-r from-[#F0F7F0] to-[#F0F7F0]/80">
 					<tr>
-						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">No.</th>
+						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">ID Aduan</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Nama</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Jenis Aduan</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Status</th>
@@ -110,8 +110,8 @@
 					@foreach ($complaints as $complaint)
 						<tr class="hover:bg-[#F0F7F0]/50 transition-colors">
 							<td class="whitespace-nowrap px-6 py-4">
-								<span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#F0F7F0] text-[#132A13] font-bold text-sm">
-									{{ $loop->iteration }}
+								<span class="inline-flex items-center justify-center w-auto min-w-[84px] h-8 rounded-lg bg-[#F0F7F0] text-[#132A13] font-bold text-xs px-3">
+									{{ $complaint->public_id ?? '-' }}
 								</span>
 							</td>
 							<td class="px-6 py-4">
@@ -186,7 +186,7 @@
 										</span>
 									@endif
 									@if($hasDeletePermission)
-										<form action="{{ route($isAdminPanel ? 'admin.panel.complaints.destroy' : 'admin.complaints.destroy', $complaint) }}" method="POST" class="inline delete-form" data-complaint-name="{{ $complaint->name }}" data-complaint-id="#{{ $complaint->id }}">
+										<form action="{{ route($isAdminPanel ? 'admin.panel.complaints.destroy' : 'admin.complaints.destroy', $complaint) }}" method="POST" class="inline delete-form" data-complaint-name="{{ $complaint->name }}" data-complaint-id="{{ $complaint->public_id ?? '#' . $complaint->id }}">
 											@csrf
 											@method('DELETE')
 											<button type="submit" class="inline-flex items-center gap-1.5 rounded-lg border-2 border-red-300 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 shadow-sm hover:bg-red-100 transition-all hover:scale-105 transform">

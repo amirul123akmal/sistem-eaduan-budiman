@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Panel\DashboardController as PanelDashboardContro
 use App\Http\Controllers\Admin\AuditTrailController;
 use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Public\PublicComplaintController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -107,21 +108,12 @@ Route::get('/user', function () {
     return view('public.mukadepan');
 })->name('public.home');
 
-Route::get('/user/tambah-aduan', function () {
-    return view('public.tambahaduan');
-})->name('public.complaint.create');
+Route::get('/user/tambah-aduan', [PublicComplaintController::class, 'create'])->name('public.complaint.create');
+Route::post('/user/tambah-aduan', [PublicComplaintController::class, 'store'])->name('public.complaint.store');
 
-Route::get('/user/semak-status', function () {
-    return view('public.semakstatus');
-})->name('public.status.check');
-
-Route::get('/user/list-aduan', function () {
-    return view('public.listaduan');
-})->name('public.complaints.list');
-
-Route::get('/user/status-aduan', function () {
-    return view('public.statusaduan');
-})->name('public.status.view');
+Route::get('/user/semak-status', [PublicComplaintController::class, 'checkStatus'])->name('public.status.check');
+Route::get('/user/list-aduan', [PublicComplaintController::class, 'list'])->name('public.complaints.list');
+Route::get('/user/status-aduan/{complaint}', [PublicComplaintController::class, 'show'])->name('public.complaint.show');
 
 
 

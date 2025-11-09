@@ -47,13 +47,17 @@ class ComplaintController extends Controller
         $query = Complaint::with(['complaintType'])->orderBy('created_at', 'desc');
 
         // Filter by status
-        if ($request->has('status') && $request->status !== '') {
+        $validStatuses = ['menunggu', 'diterima', 'ditolak', 'selesai'];
+        if ($request->has('status') && $request->status !== '' && in_array($request->status, $validStatuses)) {
             $query->where('status', $request->status);
         }
 
         // Filter by complaint type
         if ($request->has('complaint_type_id') && $request->complaint_type_id !== '') {
-            $query->where('complaint_type_id', $request->complaint_type_id);
+            $complaintTypeId = (int) $request->complaint_type_id;
+            if ($complaintTypeId > 0) {
+                $query->where('complaint_type_id', $complaintTypeId);
+            }
         }
 
         // Search
@@ -62,7 +66,12 @@ class ComplaintController extends Controller
             $query->where(function($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                   ->orWhere('phone_number', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('public_id', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%")
+                  ->orWhereHas('complaintType', function($typeQuery) use ($search) {
+                      $typeQuery->where('type_name', 'like', "%{$search}%");
+                  });
             });
         }
 
@@ -99,6 +108,7 @@ class ComplaintController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s]+$/'],
             'phone_number' => ['required', 'string', 'max:20', 'regex:/^[0-9]+$/'],
+            'email' => ['required', 'email', 'max:255'],
             'address' => ['required', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\s.,-]+$/'],
             'complaint_type_id' => ['required', 'exists:complaint_types,id'],
             'description' => ['required', 'string', 'max:500'],
@@ -113,6 +123,9 @@ class ComplaintController extends Controller
             'phone_number.required' => 'Nombor telefon diperlukan.',
             'phone_number.regex' => 'Nombor telefon hanya boleh mengandungi nombor.',
             'phone_number.max' => 'Nombor telefon tidak boleh melebihi 20 aksara.',
+            'email.required' => 'Emel diperlukan.',
+            'email.email' => 'Sila masukkan alamat emel yang sah.',
+            'email.max' => 'Emel tidak boleh melebihi 255 aksara.',
             'address.required' => 'Alamat diperlukan.',
             'address.regex' => 'Alamat hanya boleh mengandungi huruf, nombor, dan aksara khas (., -).',
             'address.max' => 'Alamat tidak boleh melebihi 200 aksara.',
@@ -195,6 +208,7 @@ class ComplaintController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s]+$/'],
             'phone_number' => ['required', 'string', 'max:20', 'regex:/^[0-9]+$/'],
+            'email' => ['required', 'email', 'max:255'],
             'address' => ['required', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\s.,-]+$/'],
             'complaint_type_id' => ['required', 'exists:complaint_types,id'],
             'description' => ['required', 'string', 'max:500'],
@@ -211,6 +225,9 @@ class ComplaintController extends Controller
             'phone_number.required' => 'Nombor telefon diperlukan.',
             'phone_number.regex' => 'Nombor telefon hanya boleh mengandungi nombor.',
             'phone_number.max' => 'Nombor telefon tidak boleh melebihi 20 aksara.',
+            'email.required' => 'Emel diperlukan.',
+            'email.email' => 'Sila masukkan alamat emel yang sah.',
+            'email.max' => 'Emel tidak boleh melebihi 255 aksara.',
             'address.required' => 'Alamat diperlukan.',
             'address.regex' => 'Alamat hanya boleh mengandungi huruf, nombor, dan aksara khas (., -).',
             'address.max' => 'Alamat tidak boleh melebihi 200 aksara.',
