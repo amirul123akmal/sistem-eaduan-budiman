@@ -102,5 +102,28 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Public/User Routes (No authentication required)
+Route::get('/user', function () {
+    return view('public.mukadepan');
+})->name('public.home');
+
+Route::get('/user/tambah-aduan', function () {
+    return view('public.tambahaduan');
+})->name('public.complaint.create');
+
+Route::get('/user/semak-status', function () {
+    return view('public.semakstatus');
+})->name('public.status.check');
+
+Route::get('/user/list-aduan', function () {
+    return view('public.listaduan');
+})->name('public.complaints.list');
+
+Route::get('/user/status-aduan', function () {
+    return view('public.statusaduan');
+})->name('public.status.view');
+
+
+
 require __DIR__.'/auth.php';
 require __DIR__.'/admin_auth.php';

@@ -1,87 +1,128 @@
 {{-- Mobile overlay --}}
 <div id="admin-sidebar-backdrop" class="fixed inset-0 z-30 hidden bg-gray-900/50 transition-opacity duration-300 lg:hidden"></div>
 
-<aside id="admin-sidebar" class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r bg-white shadow-xl/10 ring-1 ring-gray-100 transition-transform lg:translate-x-0" aria-label="Sidebar" tabindex="-1">
+<aside id="admin-sidebar" class="fixed left-0 top-0 z-40 h-screen w-64 -translate-x-full border-r border-gray-200 bg-gradient-to-b from-white to-gray-50/50 shadow-2xl transition-transform lg:translate-x-0" aria-label="Sidebar" tabindex="-1">
 	<div class="flex h-full flex-col justify-between overflow-y-auto px-4 py-6">
 		<div>
-			<div class="mb-6 px-3">
-				<a href="{{ route('admin.dashboard') }}" class="flex items-center justify-center">
-					<img src="{{ asset('images/logoKgBudiman.png') }}" alt="JPKK Kampung Budiman" class="h-auto w-full max-w-[180px] object-contain" />
+			<div class="mb-8 px-3">
+				<a href="{{ route('admin.dashboard') }}" class="group flex items-center justify-center transition-transform duration-300 hover:scale-105">
+					<div class="relative">
+						<div class="absolute inset-0 bg-[#132A13]/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+						<img src="{{ asset('images/logoKgBudiman.png') }}" alt="JPKK Kampung Budiman" class="relative h-auto w-full max-w-[180px] object-contain drop-shadow-lg" />
+					</div>
 				</a>
 			</div>
-			<nav class="space-y-1">
+			<nav class="space-y-2">
 				{{-- Dashboard --}}
-				<a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.dashboard')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.dashboard')) text-indigo-600 @else text-gray-500 @endif">
+				<a href="{{ route('admin.dashboard') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.dashboard')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.dashboard'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.dashboard')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path><path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path></svg>
 					</span>
-					Dashboard
+					<span class="relative">Dashboard</span>
 				</a>
 
 				{{-- Profil --}}
-				<a href="{{ route('profile.edit') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('profile.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('profile.*')) text-indigo-600 @else text-gray-500 @endif">
+				<a href="{{ route('profile.edit') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('profile.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('profile.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('profile.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
 					</span>
-					Profil
+					<span class="relative">Profil</span>
 				</a>
 
 				{{-- Pentadbiran --}}
-				<h3 class="mt-4 mb-2 px-3 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Pentadbiran</h3>
-				<a href="{{ route('admin.admins.index') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.admins.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.admins.*')) text-indigo-600 @else text-gray-500 @endif">
+				<div class="mt-6 mb-3 px-3">
+					<h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2">
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+						<span>Pentadbiran</span>
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+					</h3>
+				</div>
+				<a href="{{ route('admin.admins.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.admins.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.admins.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.admins.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg>
 					</span>
-					Pengurusan Admin
+					<span class="relative">Pengurusan Admin</span>
 				</a>
-				<a href="{{ route('admin.admins.create') }}" class="ml-8 flex items-center gap-2 rounded-lg px-3 py-2 text-xs transition hover:bg-gray-50 @if(request()->routeIs('admin.admins.create')) bg-indigo-50 text-indigo-700 font-semibold @else text-gray-600 @endif">
+				<a href="{{ route('admin.admins.create') }}" class="ml-8 group flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200 @if(request()->routeIs('admin.admins.create')) bg-[#F0F7F0] text-[#132A13] shadow-sm @else text-gray-600 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
 					<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z"></path></svg>
 					Tambah Admin
 				</a>
 
-				<a href="{{ route('admin.roles.index') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.roles.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.roles.*')) text-indigo-600 @else text-gray-500 @endif">
+				<a href="{{ route('admin.roles.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.roles.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.roles.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.roles.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
 					</span>
-					Peranan
+					<span class="relative">Peranan</span>
 				</a>
-				<a href="{{ route('admin.permissions.index') }}" class="ml-8 flex items-center gap-2 rounded-lg px-3 py-2 text-xs transition hover:bg-gray-50 @if(request()->routeIs('admin.permissions.*')) bg-indigo-50 text-indigo-700 font-semibold @else text-gray-600 @endif">
+				<a href="{{ route('admin.permissions.index') }}" class="ml-8 group flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-medium transition-all duration-200 @if(request()->routeIs('admin.permissions.*')) bg-[#F0F7F0] text-[#132A13] shadow-sm @else text-gray-600 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
 					<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path></svg>
 					Kebenaran
 				</a>
 
 				{{-- e-Aduan --}}
-				<h3 class="mt-4 mb-2 px-3 pt-2 text-xs font-semibold uppercase tracking-wide text-gray-400">e-Aduan</h3>
-				<a href="{{ route('admin.complaints.index') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.complaints.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.complaints.*')) text-indigo-600 @else text-gray-500 @endif">
+				<div class="mt-6 mb-3 px-3">
+					<h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2">
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+						<span>e-Aduan</span>
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+					</h3>
+				</div>
+				<a href="{{ route('admin.complaints.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.complaints.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.complaints.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.complaints.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"></path></svg>
 					</span>
-					Aduan
+					<span class="relative">Aduan</span>
 				</a>
-				<a href="{{ route('admin.complaint-types.index') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.complaint-types.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.complaint-types.*')) text-indigo-600 @else text-gray-500 @endif">
+				<a href="{{ route('admin.complaint-types.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.complaint-types.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.complaint-types.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.complaint-types.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg>
 					</span>
-					Jenis Aduan
+					<span class="relative">Jenis Aduan</span>
 				</a>
-				<a href="{{ route('admin.audit-trails.index') }}" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm transition hover:bg-gray-50 @if(request()->routeIs('admin.audit-trails.*')) bg-indigo-50 text-indigo-700 font-semibold border-l-4 border-indigo-500 @else text-gray-700 @endif">
-					<span class="inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.audit-trails.*')) text-indigo-600 @else text-gray-500 @endif">
+				<a href="{{ route('admin.audit-trails.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.audit-trails.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+					@if(request()->routeIs('admin.audit-trails.*'))
+						<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+					@endif
+					<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.audit-trails.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" clip-rule="evenodd"></path></svg>
 					</span>
-					Audit Trail
+					<span class="relative">Audit Trail</span>
 				</a>
-				<a href="#" class="flex items-center gap-3 rounded-lg py-2 px-3 text-sm text-gray-700 transition hover:bg-gray-50">
-					<span class="inline-flex h-5 w-5 items-center justify-center text-gray-500">
+				<a href="#" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-gray-900">
+					<span class="inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-gray-700">
 						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
 					</span>
 					Tetapan
 				</a>
 			</nav>
 		</div>
-		<div class="px-3 text-xs text-gray-400">Version 1.0.0</div>
+		<div class="mt-6 px-3 pt-4 border-t border-gray-200">
+			<div class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-[#F0F7F0] to-[#F0F7F0]/80 px-3 py-2">
+				<div class="w-2 h-2 rounded-full bg-[#132A13] animate-pulse"></div>
+				<span class="text-xs font-semibold text-[#132A13]">Version 1.0.0</span>
+			</div>
+		</div>
 	</div>
 	{{-- Close button for mobile --}}
-	<button type="button" data-drawer-hide="admin-sidebar" aria-controls="admin-sidebar" class="absolute right-2.5 top-2.5 inline-flex items-center rounded-lg bg-transparent p-1.5 text-sm text-gray-400 hover:bg-gray-200 hover:text-gray-900 lg:hidden">
+	<button type="button" data-drawer-hide="admin-sidebar" aria-controls="admin-sidebar" class="absolute right-2.5 top-2.5 inline-flex items-center rounded-xl bg-white/80 backdrop-blur-sm p-2 text-sm text-gray-600 shadow-lg hover:bg-white hover:text-gray-900 transition-all lg:hidden">
 		<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
 		<span class="sr-only">Close menu</span>
 	</button>

@@ -1,83 +1,130 @@
 <x-guest-layout>
-    <div class="text-center mb-6">
-        <h2 class="text-2xl font-bold text-gray-900">Log Masuk</h2>
-        <p class="mt-2 text-sm text-gray-600">Sila log masuk ke akaun anda</p>
+    <div class="min-h-screen bg-gradient-to-br from-[#F0F7F0] via-white to-[#F0F7F0] flex items-center justify-center px-4 py-12">
+        <div class="w-full max-w-md">
+            {{-- Main Card --}}
+            <div class="bg-white/90 backdrop-blur-sm p-8 sm:p-10 rounded-3xl shadow-2xl border border-[#2F4F2F]/10">
+                {{-- Header Section --}}
+                <div class="text-center mb-8">
+                    <div class="flex justify-center mb-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-[#132A13]/10 rounded-full blur-xl"></div>
+                            <div class="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#132A13] to-[#2F4F2F] flex items-center justify-center shadow-lg">
+                                <i class="fa fa-user-shield text-3xl text-white" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-bold mb-3 tracking-tight bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] bg-clip-text text-transparent">
+                        Log Masuk
+                    </h1>
+                    <p class="text-[#2F4F2F]/70 text-base font-medium">
+                        Sila log masuk ke akaun admin anda
+                    </p>
+                </div>
+
+                {{-- Form Section --}}
+                <form method="POST" action="{{ route('login') }}" id="loginForm" class="space-y-6">
+                    @csrf
+
+                    {{-- Email Address --}}
+                    <div>
+                        <label for="email" class="mb-2 block text-sm font-semibold text-[#132A13]">
+                            Emel <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa fa-envelope text-[#2F4F2F]/50" aria-hidden="true"></i>
+                            </div>
+                            <input 
+                                id="email" 
+                                type="email" 
+                                name="email" 
+                                value="{{ old('email') }}" 
+                                required 
+                                autofocus 
+                                autocomplete="username"
+                                placeholder="nama@email.com"
+                                class="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 @error('email') border-red-300 focus:ring-red-500 focus:border-red-500 @else border-gray-200 focus:ring-[#132A13] focus:border-[#132A13] @enderror bg-white text-sm transition-all"
+                            />
+                        </div>
+                        @error('email')
+                            <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Password --}}
+                    <div>
+                        <label for="password" class="mb-2 block text-sm font-semibold text-[#132A13]">
+                            Kata Laluan <span class="text-red-500">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa fa-lock text-[#2F4F2F]/50" aria-hidden="true"></i>
+                            </div>
+                            <input 
+                                id="password" 
+                                type="password"
+                                name="password"
+                                required 
+                                autocomplete="current-password"
+                                placeholder="••••••••"
+                                class="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 @error('password') border-red-300 focus:ring-red-500 focus:border-red-500 @else border-gray-200 focus:ring-[#132A13] focus:border-[#132A13] @enderror bg-white text-sm transition-all"
+                            />
+                        </div>
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                {{ $message }}
+                            </p>
+                        @enderror
+                    </div>
+
+                    {{-- Remember Me & Forgot Password --}}
+                    <div class="flex items-center justify-between">
+                        <label for="remember_me" class="inline-flex items-center cursor-pointer">
+                            <input 
+                                id="remember_me" 
+                                type="checkbox" 
+                                class="rounded border-gray-300 text-[#132A13] shadow-sm focus:ring-[#132A13] cursor-pointer" 
+                                name="remember"
+                            />
+                            <span class="ms-2 text-sm text-[#2F4F2F]/70 font-medium">Ingat saya</span>
+                        </label>
+
+                        @if (Route::has('password.request'))
+                            <a class="text-sm text-[#132A13] hover:text-[#2F4F2F] font-semibold transition-colors" href="{{ route('password.request') }}">
+                                Lupa kata laluan?
+                            </a>
+                        @endif
+                    </div>
+
+                    {{-- Submit Button --}}
+                    <div class="pt-2">
+                        <button 
+                            type="submit" 
+                            class="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] p-4 text-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] transform"
+                        >
+                            <div class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <div class="relative flex items-center justify-center gap-3">
+                                <i class="fa fa-sign-in-alt text-lg" aria-hidden="true"></i>
+                                <span class="text-base font-bold">Log Masuk</span>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+
+                {{-- Footer Info --}}
+                <div class="mt-8 pt-6 border-t border-[#2F4F2F]/10">
+                    <p class="text-xs text-center text-[#2F4F2F]/60">
+                        <i class="fa fa-shield-alt mr-1" aria-hidden="true"></i>
+                        Akses terhad untuk kakitangan pentadbiran sahaja
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <form method="POST" action="{{ route('login') }}" id="loginForm">
-        @csrf
-
-        <!-- Email Address -->
-        <div>
-            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
-                Emel
-            </label>
-            <input 
-                id="email" 
-                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors @error('email') border-red-300 @enderror" 
-                type="email" 
-                name="email" 
-                value="{{ old('email') }}" 
-                required 
-                autofocus 
-                autocomplete="username"
-                placeholder="nama@email.com"
-            />
-            @error('email')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Password -->
-        <div class="mt-4">
-            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
-                Kata Laluan
-            </label>
-            <input 
-                id="password" 
-                class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 transition-colors @error('password') border-red-300 @enderror"
-                type="password"
-                name="password"
-                required 
-                autocomplete="current-password"
-                placeholder="••••••••"
-            />
-            @error('password')
-                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-            @enderror
-        </div>
-
-        <!-- Remember Me -->
-        <div class="flex items-center justify-between mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input 
-                    id="remember_me" 
-                    type="checkbox" 
-                    class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" 
-                    name="remember"
-                />
-                <span class="ms-2 text-sm text-gray-600">Ingat saya</span>
-            </label>
-
-            @if (Route::has('password.request'))
-                <a class="text-sm text-indigo-600 hover:text-indigo-500 font-medium" href="{{ route('password.request') }}">
-                    Lupa kata laluan?
-                </a>
-            @endif
-        </div>
-
-        <div class="mt-6">
-            <button 
-                type="submit" 
-                class="w-full flex justify-center items-center rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors"
-            >
-                <svg class="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
-                Log Masuk
-            </button>
-        </div>
-    </form>
 
     @push('scripts')
     <script>
@@ -97,7 +144,7 @@
                 icon: 'info',
                 title: 'Maklumat',
                 text: '{{ session('status') }}',
-                confirmButtonColor: '#4f46e5'
+                confirmButtonColor: '#132A13'
             });
         @endif
     </script>
