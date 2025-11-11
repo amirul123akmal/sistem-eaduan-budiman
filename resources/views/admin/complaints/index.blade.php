@@ -229,8 +229,72 @@
 		@endif
 	</div>
 
+	{{-- Modern Pagination --}}
 	@if($complaints->hasPages())
-		<div class="mt-4">{{ $complaints->appends(request()->query())->links() }}</div>
+		<div class="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
+			<div class="flex items-center gap-2 text-sm text-gray-600">
+				<span>Menunjukkan</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->firstItem() ?? 0 }}</span>
+				<span>hingga</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->lastItem() ?? 0 }}</span>
+				<span>daripada</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->total() }}</span>
+				<span>aduan</span>
+			</div>
+			
+			<div class="flex items-center gap-2">
+				{{-- Previous Button --}}
+				@if($complaints->onFirstPage())
+					<button disabled class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+						Sebelumnya
+					</button>
+				@else
+					<a href="{{ $complaints->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+						Sebelumnya
+					</a>
+				@endif
+
+				{{-- Page Numbers --}}
+				<div class="hidden sm:flex items-center gap-1">
+					@foreach($complaints->getUrlRange(1, $complaints->lastPage()) as $page => $url)
+						@if($page == $complaints->currentPage())
+							<span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-sm font-semibold text-white shadow-md">{{ $page }}</span>
+						@elseif($page == 1 || $page == $complaints->lastPage() || ($page >= $complaints->currentPage() - 2 && $page <= $complaints->currentPage() + 2))
+							<a href="{{ $complaints->appends(request()->query())->url($page) }}" class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">{{ $page }}</a>
+						@elseif($page == $complaints->currentPage() - 3 || $page == $complaints->currentPage() + 3)
+							<span class="flex h-9 w-9 items-center justify-center text-sm text-gray-400">...</span>
+						@endif
+					@endforeach
+				</div>
+
+				{{-- Mobile Page Info --}}
+				<div class="flex sm:hidden items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700">
+					<span>Halaman</span>
+					<span class="text-[#132A13]">{{ $complaints->currentPage() }}</span>
+					<span>daripada</span>
+					<span class="text-[#132A13]">{{ $complaints->lastPage() }}</span>
+				</div>
+
+				{{-- Next Button --}}
+				@if($complaints->hasMorePages())
+					<a href="{{ $complaints->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">
+						Seterusnya
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+					</a>
+				@else
+					<button disabled class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+						Seterusnya
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+					</button>
+				@endif
+			</div>
+		</div>
+	@else
+		<div class="mt-6 text-center text-sm text-gray-600">
+			<p>Menunjukkan semua {{ $complaints->total() }} aduan</p>
+		</div>
 	@endif
 
 	@push('scripts')

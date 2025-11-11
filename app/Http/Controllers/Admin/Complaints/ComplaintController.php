@@ -75,7 +75,7 @@ class ComplaintController extends Controller
             });
         }
 
-        $complaints = $query->paginate(15);
+        $complaints = $query->paginate(5);
         $complaintTypes = ComplaintType::orderBy('type_name')->get();
         $statuses = ['menunggu', 'diterima', 'ditolak', 'selesai'];
 

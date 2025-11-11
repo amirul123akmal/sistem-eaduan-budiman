@@ -15,10 +15,10 @@
                                 <i class="fa fa-pencil-alt text-2xl sm:text-3xl text-white" aria-hidden="true"></i>
                             </div>
                         </div>
-                    </div>
+        </div>
                     <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 tracking-tight bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] bg-clip-text text-transparent">
-                        Borang Tambah Aduan
-                    </h1>
+            Borang Tambah Aduan
+        </h1>
                     <p class="text-[#2F4F2F]/70 text-sm sm:text-base font-medium">
                         Sila isi maklumat di bawah dengan lengkap dan betul
                     </p>
@@ -52,10 +52,10 @@
                                 <span id="nama-count" class="text-xs text-[#2F4F2F]/60">0/100</span>
                             </div>
                             <div id="nama-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
+            </div>
 
                         {{-- Telefon --}}
-                        <div>
+            <div>
                             <label class="mb-2 block text-sm font-semibold text-[#132A13]">
                                 Nombor Telefon <span class="text-red-500">*</span>
                             </label>
@@ -76,10 +76,10 @@
                                 <span id="telefon-count" class="text-xs text-[#2F4F2F]/60">0/20</span>
                             </div>
                             <div id="telefon-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
+            </div>
 
                         {{-- Emel --}}
-                        <div>
+            <div>
                             <label class="mb-2 block text-sm font-semibold text-[#132A13]">
                                 Emel <span class="text-red-500">*</span>
                             </label>
@@ -94,7 +94,7 @@
                                        placeholder="nama@email.com"
                                        required>
                             </div>
-                        </div>
+            </div>
 
                         {{-- Jenis Aduan --}}
                         <div class="md:col-span-2 lg:col-span-1">
@@ -121,7 +121,7 @@
                                 </div>
                             </div>
                             <div id="kategori-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
+            </div>
 
                         {{-- Alamat --}}
                         <div class="md:col-span-2 lg:col-span-3">
@@ -145,7 +145,7 @@
                                 <span id="alamat-count" class="text-xs text-[#2F4F2F]/60">0/200</span>
                             </div>
                             <div id="alamat-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
+            </div>
 
                         {{-- Huraian --}}
                         <div class="md:col-span-2 lg:col-span-3">
@@ -164,7 +164,7 @@
                                 <span id="huraian-count" class="text-xs text-[#2F4F2F]/60">0/500</span>
                             </div>
                             <div id="huraian-error" class="mt-1 text-sm text-red-600 hidden"></div>
-                        </div>
+            </div>
 
                         {{-- Gambar --}}
                         <div class="md:col-span-2 lg:col-span-3">
@@ -186,7 +186,7 @@
                             <div id="gambar-error" class="mt-1 text-sm text-red-600 hidden"></div>
                             <div id="gambar-count" class="mt-1 text-xs text-[#2F4F2F]/60 hidden"></div>
                         </div>
-                    </div>
+            </div>
 
                     {{-- Action Buttons --}}
                     <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 sm:pt-6 border-t border-[#2F4F2F]/10">
@@ -202,9 +202,9 @@
                                 <i class="fa fa-paper-plane text-lg" aria-hidden="true"></i>
                                 <span class="font-bold">Hantar Aduan</span>
                             </div>
-                        </button>
-                    </div>
-                </form>
+                </button>
+            </div>
+        </form>
             </div>
 
             {{-- Help Section --}}
@@ -216,7 +216,7 @@
             </div>
         </div>
     </div>
-</div>
+    </div>
 
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -663,15 +663,25 @@
 
     // Show success/error messages from server
     @if(session('success'))
+        @php
+            $emailSent = session('email_sent', false);
+            $redirectTo = session('redirect_to', 'semakstatus');
+        @endphp
         Swal.fire({
-            icon: 'success',
-            title: 'Berjaya!',
+            icon: '{{ $emailSent ? 'success' : 'warning' }}',
+            title: '{{ $emailSent ? 'Berjaya!' : 'Berjaya (Dengan Nota)' }}',
             text: '{{ session('success') }}',
             confirmButtonColor: '#132A13',
-            timer: 3000,
-            timerProgressBar: true
-        }).then(() => {
-            window.location.href = '{{ route('public.status.check') }}';
+            timer: {{ $emailSent ? 3000 : 5000 }},
+            timerProgressBar: true,
+            showConfirmButton: true,
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            @if($redirectTo === 'semakstatus')
+                window.location.href = '{{ route('public.status.check') }}';
+            @else
+                // Stay on current page if no redirect specified
+            @endif
         });
     @endif
 
@@ -680,16 +690,18 @@
             icon: 'error',
             title: 'Ralat!',
             text: '{{ session('error') }}',
-            confirmButtonColor: '#132A13'
+            confirmButtonColor: '#132A13',
+            confirmButtonText: 'OK'
         });
     @endif
 
     @if($errors->any())
         Swal.fire({
             icon: 'error',
-            title: 'Ralat!',
+            title: 'Ralat Validasi!',
             html: '<ul class="text-left list-disc list-inside">@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>',
-            confirmButtonColor: '#132A13'
+            confirmButtonColor: '#132A13',
+            confirmButtonText: 'OK'
         });
     @endif
 </script>

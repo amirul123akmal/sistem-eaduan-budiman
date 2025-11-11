@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\Users\AdminUserController;
-use App\Http\Controllers\Admin\Access\RoleController;
-use App\Http\Controllers\Admin\Access\PermissionController;
-use App\Http\Controllers\Admin\ComplaintTypes\ComplaintTypeController;
-use App\Http\Controllers\Admin\Complaints\ComplaintController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\Panel\DashboardController as PanelDashboardController;
-use App\Http\Controllers\Admin\AuditTrailController;
-use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
-use App\Http\Controllers\Public\PublicComplaintController;
 use App\Models\User;
+use App\Mail\TestMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AuditTrailController;
+use App\Http\Controllers\Admin\Access\RoleController;
+use App\Http\Controllers\Admin\Users\AdminUserController;
+use App\Http\Controllers\Public\PublicComplaintController;
+use App\Http\Controllers\Admin\Access\PermissionController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\Complaints\ComplaintController;
+use App\Http\Controllers\Admin\ComplaintTypes\ComplaintTypeController;
+use App\Http\Controllers\Admin\Panel\DashboardController as PanelDashboardController;
+use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailController;
+use App\Http\Controllers\Admin\Websites\BizHubController;
 
 // Landing page - show login page, redirect authenticated users to dashboard
 Route::get('/', function () {
@@ -81,6 +84,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
 
     // Audit Trails
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
+
+    // Websites Management (Project B Integration)
+    Route::prefix('websites')->name('websites.')->group(function () {
+        Route::resource('bizhub', BizHubController::class);
+        // Route::resource('aktiviti', AktivitiController::class);
+        // Route::resource('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
+        // Route::resource('fasiliti', FasilitiController::class);
+    });
 });
 
 // Normal Admin dashboard (limited panel)
@@ -115,6 +126,10 @@ Route::get('/user/semak-status', [PublicComplaintController::class, 'checkStatus
 Route::get('/user/list-aduan', [PublicComplaintController::class, 'list'])->name('public.complaints.list');
 Route::get('/user/status-aduan/{complaint}', [PublicComplaintController::class, 'show'])->name('public.complaint.show');
 
+// Route::get('/test-mail', function () {
+//     Mail::to('shahizzulikhwan71@gmail.com')->send(new TestMail());
+//     return 'Email sent successfully';
+// });
 
 
 require __DIR__.'/auth.php';

@@ -35,4 +35,21 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Project B API Configuration
+    |--------------------------------------------------------------------------
+    |
+    | Configuration for connecting to Project B (External System) API.
+    | This allows Project A (e-Aduan) to interact with Project B's data
+    | through secure API endpoints.
+    |
+    */
+
+    'project_b' => [
+        'url' => env('PROJECT_B_API_URL', 'http://localhost:8001/api'),
+        'token' => env('PROJECT_B_API_TOKEN', ''),
+        'timeout' => env('PROJECT_B_API_TIMEOUT', 30),
+    ],
+
 ];

@@ -115,4 +115,16 @@ return [
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email Address
+    |--------------------------------------------------------------------------
+    |
+    | This email address will receive notifications for new complaints.
+    | You can set this in your .env file as ADMIN_EMAIL.
+    |
+    */
+
+    'admin_email' => env('ADMIN_EMAIL', null),
+
 ];

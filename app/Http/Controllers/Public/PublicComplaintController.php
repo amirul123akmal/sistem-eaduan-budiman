@@ -3,12 +3,16 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Mail\ComplaintReceivedNotification;
+use App\Mail\ComplaintSubmittedNotification;
 use App\Models\Complaint;
 use App\Models\ComplaintType;
 use App\Models\ComplaintStatusLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -111,6 +115,9 @@ class PublicComplaintController extends Controller
         }
 
         $complaint = Complaint::create($complaintData);
+        
+        // Reload complaint with relationships for email
+        $complaint->load(['complaintType']);
 
         // Create status log (for public, use first admin user as system user)
         try {
@@ -133,8 +140,42 @@ class PublicComplaintController extends Controller
             // The complaint is still created successfully
         }
 
+        // Send email notifications
+        $emailSent = false;
+        $emailError = null;
+        
+        try {
+            // Send email to the resident (penduduk)
+            if ($complaint->email) {
+                Mail::to($complaint->email)->send(new ComplaintSubmittedNotification($complaint));
+                $emailSent = true;
+            }
+            
+            // Send email to admin
+            $adminEmail = config('mail.admin_email', env('ADMIN_EMAIL'));
+            if ($adminEmail) {
+                Mail::to($adminEmail)->send(new ComplaintReceivedNotification($complaint));
+            }
+        } catch (\Exception $e) {
+            // Log the error but don't fail the complaint creation
+            $emailError = $e->getMessage();
+            Log::error('Failed to send complaint notification emails: ' . $emailError);
+        }
+
+        // Prepare success message
+        $successMessage = 'Aduan anda berjaya dihantar! ID Aduan: ' . ($complaint->public_id ?? '#' . $complaint->id);
+        
+        if ($emailSent) {
+            $successMessage .= ' Emel pengesahan telah dihantar ke ' . $complaint->email . '.';
+        } elseif ($emailError) {
+            // If email failed, still show success but with a note
+            $successMessage .= ' (Nota: Emel pengesahan tidak dapat dihantar, tetapi aduan anda telah direkodkan.)';
+        }
+
         return redirect()->route('public.complaint.create')
-            ->with('success', 'Aduan anda berjaya dihantar! ID Aduan: ' . $complaint->public_id);
+            ->with('success', $successMessage)
+            ->with('email_sent', $emailSent)
+            ->with('redirect_to', 'semakstatus');
     }
 
     /**
