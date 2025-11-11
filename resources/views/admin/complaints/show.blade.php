@@ -4,7 +4,7 @@
 <div class="mb-8 flex items-center justify-between">
     <div>
         <h1 class="text-3xl font-bold text-gray-900 mb-2">Butiran Aduan</h1>
-        <p class="text-sm text-gray-600">ID Aduan: #{{ $complaint->id }}</p>
+        <p class="text-sm text-gray-600">ID Aduan: {{ $complaint->public_id ?? 'N/A' }}</p>
     </div>
     <div class="flex items-center gap-3">
         <a href="{{ route($isAdminPanel ? 'admin.panel.complaints.edit' : 'admin.complaints.edit', $complaint) }}"
@@ -106,7 +106,7 @@
             <dl class="grid gap-6 sm:grid-cols-2">
                 <div class="bg-gradient-to-br from-[#F0F7F0] to-white p-4 rounded-xl border border-[#F0F7F0]">
                     <dt class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">ID Aduan</dt>
-                    <dd class="text-lg font-bold text-[#132A13]">#{{ $complaint->id }}</dd>
+                    <dd class="text-lg font-bold text-[#132A13]">{{ $complaint->public_id ?? 'N/A' }}</dd>
                 </div>
                 <div class="bg-gradient-to-br from-[#F0F7F0] to-white p-4 rounded-xl border border-[#F0F7F0]">
                     <dt class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">Status</dt>
@@ -147,6 +147,13 @@
                         Telefon
                     </dt>
                     <dd class="text-sm font-semibold text-gray-900">{{ $complaint->phone_number }}</dd>
+                </div>
+                <div class="bg-gradient-to-br from-gray-50 to-white p-4 rounded-xl border border-gray-200">
+                    <dt class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                        <svg class="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                        Emel
+                    </dt>
+                    <dd class="text-sm font-semibold text-gray-900">{{ $complaint->email ?? '-' }}</dd>
                 </div>
                 <div class="sm:col-span-2 bg-gradient-to-br from-gray-50 to-white p-4 rounded-xl border border-gray-200">
                     <dt class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 flex items-center gap-1">
@@ -305,7 +312,7 @@
         
         Swal.fire({
             title: 'Adakah anda pasti?',
-            text: `Aduan #{{ $complaint->id }} - "{{ $complaint->name }}" akan dipadam secara kekal!`,
+            text: `Aduan {{ $complaint->public_id ?? '#' . $complaint->id }} - "{{ $complaint->name }}" akan dipadam secara kekal!`,
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#dc2626',

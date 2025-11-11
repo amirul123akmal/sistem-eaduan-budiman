@@ -5,7 +5,7 @@
 		<div class="flex items-center justify-between">
 			<div>
 				<h1 class="text-3xl font-bold text-gray-900 mb-2">Kemaskini Aduan</h1>
-				<p class="text-sm text-gray-600">ID Aduan: #{{ $complaint->id }}</p>
+				<p class="text-sm text-gray-600">ID Aduan: {{ $complaint->public_id ?? 'N/A' }}</p>
 			</div>
 			<a href="{{ route($isAdminPanel ? 'admin.panel.complaints.index' : 'admin.complaints.index') }}" class="rounded-xl border-2 border-gray-300 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-all flex items-center gap-2">
 				<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
@@ -94,6 +94,38 @@
 					<p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
 						<svg class="h-3 w-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
 						Hanya nombor dibenarkan
+					</p>
+				</div>
+
+				{{-- Email --}}
+				<div>
+					<label for="email" class="block text-sm font-semibold text-gray-700 mb-2">
+						<div class="flex items-center gap-2">
+							<svg class="h-4 w-4 text-[#132A13]" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+							Emel <span class="text-red-500">*</span>
+						</div>
+					</label>
+					<input 
+						type="email" 
+						name="email" 
+						id="email" 
+						value="{{ old('email', $complaint->email) }}" 
+						required
+						maxlength="255"
+						title="Sila masukkan alamat emel yang sah"
+						class="mt-1 block w-full rounded-xl border-2 border-gray-200 px-4 py-3 shadow-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 sm:text-sm transition-all @error('email') border-red-300 focus:border-red-500 focus:ring-red-500/20 @enderror"
+						oninput="validateEmail(this)"
+					/>
+					<div id="email-error" class="mt-1 text-sm text-red-600 hidden"></div>
+					@error('email')
+						<p class="mt-1 text-sm text-red-600 flex items-center gap-1">
+							<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path></svg>
+							{{ $message }}
+						</p>
+					@enderror
+					<p class="mt-2 text-xs text-gray-500 flex items-center gap-1">
+						<svg class="h-3 w-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path></svg>
+						Contoh: nama@email.com
 					</p>
 				</div>
 
@@ -472,6 +504,32 @@
 			}
 		}
 
+		// Validate email field
+		function validateEmail(input) {
+			const value = input.value;
+			const errorDiv = document.getElementById('email-error');
+			const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			
+			if (value && !emailPattern.test(value)) {
+				input.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+				input.classList.remove('border-gray-300');
+				errorDiv.textContent = 'Sila masukkan alamat emel yang sah (contoh: nama@email.com).';
+				errorDiv.classList.remove('hidden');
+				return false;
+			} else if (value && value.length > 255) {
+				input.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+				input.classList.remove('border-gray-300');
+				errorDiv.textContent = 'Emel tidak boleh melebihi 255 aksara.';
+				errorDiv.classList.remove('hidden');
+				return false;
+			} else {
+				input.classList.remove('border-red-300', 'ring-2', 'ring-red-200');
+				input.classList.add('border-gray-300');
+				errorDiv.classList.add('hidden');
+				return true;
+			}
+		}
+
 		// Image preview functionality
 		document.getElementById('image_path').addEventListener('change', function(e) {
 			const container = document.getElementById('image-preview-container');
@@ -502,6 +560,7 @@
 		document.getElementById('complaintForm').addEventListener('submit', function(e) {
 			const name = document.getElementById('name');
 			const phone = document.getElementById('phone_number');
+			const email = document.getElementById('email');
 			const address = document.getElementById('address');
 			const description = document.getElementById('description');
 			const adminComment = document.getElementById('admin_comment');
@@ -511,9 +570,18 @@
 			// Validate all fields
 			if (!validateName(name)) isValid = false;
 			if (!validatePhone(phone)) isValid = false;
+			if (!validateEmail(email)) isValid = false;
 			if (!validateAddress(address)) isValid = false;
 			
 			// Check max lengths
+			if (email.value.length > 255) {
+				email.classList.add('border-red-300', 'ring-2', 'ring-red-200');
+				const errorDiv = document.getElementById('email-error');
+				errorDiv.textContent = 'Emel tidak boleh melebihi 255 aksara.';
+				errorDiv.classList.remove('hidden');
+				isValid = false;
+			}
+			
 			if (address.value.length > 200) {
 				address.classList.add('border-red-300', 'ring-2', 'ring-red-200');
 				const errorDiv = document.getElementById('address-error');

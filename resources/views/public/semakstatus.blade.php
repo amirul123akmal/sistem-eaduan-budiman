@@ -25,7 +25,7 @@
                 </div>
 
                 {{-- Form Section --}}
-                <form class="space-y-6" id="checkStatusForm">
+                <form action="{{ route('public.complaints.list') }}" method="GET" class="space-y-6" id="checkStatusForm">
                     <div>
                         <label class="mb-2 block text-sm font-semibold text-[#132A13]">
                             Nombor Telefon <span class="text-red-500">*</span>
@@ -50,8 +50,7 @@
                     </div>
 
                     {{-- Submit Button --}}
-                    <button type="button" 
-                            onclick="window.location.href='{{ route('public.complaints.list') }}'"
+                    <button type="submit" 
                             class="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] p-4 text-white shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] transform">
                         <div class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                         <div class="relative flex items-center justify-center gap-3">
@@ -83,11 +82,22 @@
 </div>
 
 @push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     // Phone number validation - only numbers
     document.getElementById('no_telefon').addEventListener('input', function(e) {
         this.value = this.value.replace(/[^0-9]/g, '');
     });
+
+    // Show error messages from server
+    @if(session('error'))
+        Swal.fire({
+            icon: 'error',
+            title: 'Ralat!',
+            text: '{{ session('error') }}',
+            confirmButtonColor: '#132A13'
+        });
+    @endif
 </script>
 @endpush
 @endsection

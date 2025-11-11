@@ -106,12 +106,44 @@
 					</span>
 					<span class="relative">Audit Trail</span>
 				</a>
-				<a href="#" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-gray-50 hover:text-gray-900">
-					<span class="inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-gray-700">
-						<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path></svg>
-					</span>
-					Tetapan
-				</a>
+				
+
+				{{-- Website Kg-Budiman --}}
+				<div class="mt-6 mb-3 px-3">
+					<h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2">
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+						<span>Kg-Budiman</span>
+						<div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+					</h3>
+				</div>
+			<a href="{{ route('admin.websites.bizhub.index') }}" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if(request()->routeIs('admin.websites.bizhub.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+				@if(request()->routeIs('admin.websites.bizhub.*'))
+					<div class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+				@endif
+				<span class="relative inline-flex h-5 w-5 items-center justify-center @if(request()->routeIs('admin.websites.bizhub.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
+					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3z"></path><path d="M3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"></path></svg>
+				</span>
+				<span class="relative">BizHub Kg. Budiman</span>
+			</a>
+			<a href="#" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
+				<span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
+					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+				</span>
+				Aktiviti Kg. Budiman
+			</a>
+			<a href="#" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
+				<span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
+					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"></path></svg>
+				</span>
+				Ahli Jawatan Kuasa
+			</a>
+			<a href="#" class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
+				<span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
+					<svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"></path></svg>
+				</span>
+				Fasiliti
+			</a>
+				
 			</nav>
 		</div>
 		<div class="mt-6 px-3 pt-4 border-t border-gray-200">

@@ -43,7 +43,7 @@
 					<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
 						<svg class="h-5 w-5 text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
 					</div>
-					<input type="text" name="search" value="{{ request('search') }}" placeholder="Nama, telefon, atau penerangan..." class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all">
+					<input type="text" name="search" value="{{ request('search') }}" placeholder="ID Aduan, Nama, Telefon, Emel, atau Penerangan..." class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all">
 				</div>
 			</div>
 			<div>
@@ -55,7 +55,7 @@
 					<select name="status" class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all appearance-none cursor-pointer">
 						<option value="">Semua Status</option>
 						@foreach($statuses as $status)
-							<option value="{{ $status }}" {{ request('status') === $status ? 'selected' : '' }}>
+							<option value="{{ $status }}" {{ request('status') == $status ? 'selected' : '' }}>
 								{{ ucfirst($status) }}
 							</option>
 						@endforeach
@@ -71,7 +71,7 @@
 					<select name="complaint_type_id" class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all appearance-none cursor-pointer">
 						<option value="">Semua Jenis</option>
 						@foreach($complaintTypes as $type)
-							<option value="{{ $type->id }}" {{ request('complaint_type_id') == $type->id ? 'selected' : '' }}>
+							<option value="{{ $type->id }}" {{ (string)request('complaint_type_id') === (string)$type->id ? 'selected' : '' }}>
 								{{ $type->type_name }}
 							</option>
 						@endforeach
@@ -98,7 +98,7 @@
 			<table class="min-w-full divide-y divide-gray-200">
 				<thead class="bg-gradient-to-r from-[#F0F7F0] to-[#F0F7F0]/80">
 					<tr>
-						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">No.</th>
+						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">ID Aduan</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Nama</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Jenis Aduan</th>
 						<th class="px-6 py-4 text-left text-xs font-bold uppercase tracking-wider text-gray-700">Status</th>
@@ -110,8 +110,8 @@
 					@foreach ($complaints as $complaint)
 						<tr class="hover:bg-[#F0F7F0]/50 transition-colors">
 							<td class="whitespace-nowrap px-6 py-4">
-								<span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#F0F7F0] text-[#132A13] font-bold text-sm">
-									{{ $loop->iteration }}
+								<span class="inline-flex items-center justify-center w-auto min-w-[84px] h-8 rounded-lg bg-[#F0F7F0] text-[#132A13] font-bold text-xs px-3">
+									{{ $complaint->public_id ?? '-' }}
 								</span>
 							</td>
 							<td class="px-6 py-4">
@@ -186,7 +186,7 @@
 										</span>
 									@endif
 									@if($hasDeletePermission)
-										<form action="{{ route($isAdminPanel ? 'admin.panel.complaints.destroy' : 'admin.complaints.destroy', $complaint) }}" method="POST" class="inline delete-form" data-complaint-name="{{ $complaint->name }}" data-complaint-id="#{{ $complaint->id }}">
+										<form action="{{ route($isAdminPanel ? 'admin.panel.complaints.destroy' : 'admin.complaints.destroy', $complaint) }}" method="POST" class="inline delete-form" data-complaint-name="{{ $complaint->name }}" data-complaint-id="{{ $complaint->public_id ?? '#' . $complaint->id }}">
 											@csrf
 											@method('DELETE')
 											<button type="submit" class="inline-flex items-center gap-1.5 rounded-lg border-2 border-red-300 bg-red-50 px-3 py-1.5 text-xs font-semibold text-red-600 shadow-sm hover:bg-red-100 transition-all hover:scale-105 transform">
@@ -229,8 +229,72 @@
 		@endif
 	</div>
 
+	{{-- Modern Pagination --}}
 	@if($complaints->hasPages())
-		<div class="mt-4">{{ $complaints->appends(request()->query())->links() }}</div>
+		<div class="mt-6 flex flex-col items-center justify-between gap-4 sm:flex-row">
+			<div class="flex items-center gap-2 text-sm text-gray-600">
+				<span>Menunjukkan</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->firstItem() ?? 0 }}</span>
+				<span>hingga</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->lastItem() ?? 0 }}</span>
+				<span>daripada</span>
+				<span class="font-semibold text-[#132A13]">{{ $complaints->total() }}</span>
+				<span>aduan</span>
+			</div>
+			
+			<div class="flex items-center gap-2">
+				{{-- Previous Button --}}
+				@if($complaints->onFirstPage())
+					<button disabled class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+						Sebelumnya
+					</button>
+				@else
+					<a href="{{ $complaints->appends(request()->query())->previousPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+						Sebelumnya
+					</a>
+				@endif
+
+				{{-- Page Numbers --}}
+				<div class="hidden sm:flex items-center gap-1">
+					@foreach($complaints->getUrlRange(1, $complaints->lastPage()) as $page => $url)
+						@if($page == $complaints->currentPage())
+							<span class="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-sm font-semibold text-white shadow-md">{{ $page }}</span>
+						@elseif($page == 1 || $page == $complaints->lastPage() || ($page >= $complaints->currentPage() - 2 && $page <= $complaints->currentPage() + 2))
+							<a href="{{ $complaints->appends(request()->query())->url($page) }}" class="flex h-9 w-9 items-center justify-center rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">{{ $page }}</a>
+						@elseif($page == $complaints->currentPage() - 3 || $page == $complaints->currentPage() + 3)
+							<span class="flex h-9 w-9 items-center justify-center text-sm text-gray-400">...</span>
+						@endif
+					@endforeach
+				</div>
+
+				{{-- Mobile Page Info --}}
+				<div class="flex sm:hidden items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-700">
+					<span>Halaman</span>
+					<span class="text-[#132A13]">{{ $complaints->currentPage() }}</span>
+					<span>daripada</span>
+					<span class="text-[#132A13]">{{ $complaints->lastPage() }}</span>
+				</div>
+
+				{{-- Next Button --}}
+				@if($complaints->hasMorePages())
+					<a href="{{ $complaints->appends(request()->query())->nextPageUrl() }}" class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-[#F0F7F0] hover:border-[#132A13] hover:text-[#132A13]">
+						Seterusnya
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+					</a>
+				@else
+					<button disabled class="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed">
+						Seterusnya
+						<svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+					</button>
+				@endif
+			</div>
+		</div>
+	@else
+		<div class="mt-6 text-center text-sm text-gray-600">
+			<p>Menunjukkan semua {{ $complaints->total() }} aduan</p>
+		</div>
 	@endif
 
 	@push('scripts')
