@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\Panel\DashboardController as PanelDashboardContro
 use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailController;
 use App\Http\Controllers\Admin\Websites\BizHubController;
 use App\Http\Controllers\Admin\Websites\AktivitiController;
+use App\Http\Controllers\Admin\Websites\FasilitiController;
 
 // Landing page - show login page, redirect authenticated users to dashboard
 Route::get('/', function () {
@@ -111,8 +112,8 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
     Route::prefix('websites')->name('websites.')->group(function () {
         Route::get('bizhub', [BizHubController::class, 'create']);
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
+        Route::resource('fasiliti', FasilitiController::class);
         // Route::get('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
-        // Route::get('fasiliti', FasilitiController::class);
     });
 });
 

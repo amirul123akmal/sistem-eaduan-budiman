@@ -157,6 +157,24 @@
                     </span>
                     <span class="relative">Aktiviti</span>
                 </a>
+                <a href="{{ route('admin.panel.websites.fasiliti.index') }}"
+                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.panel.fasiliti.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+                    @if (request()->routeIs('admin.panel.fasiliti.*'))
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        </div>
+                    @endif
+                    <span
+                        class="relative inline-flex h-5 w-5 items-center justify-center @if (request()->routeIs('admin.panel.fasiliti.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                    <span class="relative">fasiliti</span>
+                </a>
             </nav>
         </div>
         <div class="mt-6 px-3 pt-4 border-t border-gray-200">
