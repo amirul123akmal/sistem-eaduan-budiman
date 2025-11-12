@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\ComplaintTypes\ComplaintTypeController;
 use App\Http\Controllers\Admin\Panel\DashboardController as PanelDashboardController;
 use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailController;
 use App\Http\Controllers\Admin\Websites\BizHubController;
+use App\Http\Controllers\Admin\Websites\AktivitiController;
 
 // Landing page - show login page, redirect authenticated users to dashboard
 Route::get('/', function () {
@@ -86,12 +87,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
 
     // Websites Management (Project B Integration)
-    Route::prefix('websites')->name('websites.')->group(function () {
-        Route::resource('bizhub', BizHubController::class);
+    // Route::prefix('websites')->name('websites.')->group(function () {
+        // Route::resource('bizhub', [BizHubController::class, 'create']);
         // Route::resource('aktiviti', AktivitiController::class);
         // Route::resource('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
         // Route::resource('fasiliti', FasilitiController::class);
-    });
+    // });
 });
 
 // Normal Admin dashboard (limited panel)
@@ -106,6 +107,13 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
 
     // Audit Trails
     Route::get('audit-trails', [PanelAuditTrailController::class, 'index'])->name('audit-trails.index');
+
+    Route::prefix('websites')->name('websites.')->group(function () {
+        Route::get('bizhub', [BizHubController::class, 'create']);
+        Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
+        // Route::get('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
+        // Route::get('fasiliti', FasilitiController::class);
+    });
 });
 
 Route::middleware('auth')->group(function () {
