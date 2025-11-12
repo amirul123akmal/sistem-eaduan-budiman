@@ -19,4 +19,16 @@ class ApiHelper
         $data = Http::get(config('app.website_api_url') . $targetUrl);
         return json_decode($data->body());
     }
+
+    public static function post($targetUrl, $payload)
+    {
+        $data = Http::post(config('app.website_api_url') . $targetUrl, $payload);
+        return json_decode($data->body());
+    }
+
+    public static function delete($targetUrl, $payload = [])
+    {
+        $data = Http::delete(config('app.website_api_url') . $targetUrl, $payload);
+        return json_decode($data->body());
+    }
 }
