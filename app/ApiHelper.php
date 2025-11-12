@@ -14,7 +14,7 @@ class ApiHelper
         //
     }
 
-    public static function fetching($targetUrl)
+    public static function get($targetUrl)
     {
         $data = Http::get(config('app.website_api_url') . $targetUrl);
         return json_decode($data->body());
