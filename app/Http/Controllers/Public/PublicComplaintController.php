@@ -35,11 +35,11 @@ class PublicComplaintController extends Controller
         // Map form field names to database column names
         $validated = $request->validate([
             'nama' => ['required', 'string', 'max:100', 'regex:/^[a-zA-Z\s]+$/'],
-            'telefon' => ['required', 'string', 'max:20', 'regex:/^[0-9]+$/'],
+            'telefon' => ['required', 'string', 'min:10', 'max:12', 'regex:/^[0-9]+$/'],
             'email' => ['required', 'email', 'max:255'],
             'alamat' => ['required', 'string', 'max:200', 'regex:/^[a-zA-Z0-9\s.,-]+$/'],
             'kategori' => ['required'],
-            'huraian' => ['required', 'string', 'max:500'],
+            'huraian' => ['required', 'string', 'max:1000'],
             'gambar' => ['nullable', 'array', 'max:10'],
             'gambar.*' => ['image', 'mimes:jpg,jpeg,png', 'max:2048'],
         ], [
@@ -47,8 +47,9 @@ class PublicComplaintController extends Controller
             'nama.regex' => 'Nama hanya boleh mengandungi huruf dan ruang.',
             'nama.max' => 'Nama tidak boleh melebihi 100 aksara.',
             'telefon.required' => 'Nombor telefon diperlukan.',
+            'telefon.min' => 'Nombor telefon mestilah sekurang-kurangnya 10 digit.',
+            'telefon.max' => 'Nombor telefon tidak boleh melebihi 12 digit.',
             'telefon.regex' => 'Nombor telefon hanya boleh mengandungi nombor.',
-            'telefon.max' => 'Nombor telefon tidak boleh melebihi 20 aksara.',
             'email.required' => 'Emel diperlukan.',
             'email.email' => 'Sila masukkan alamat emel yang sah.',
             'email.max' => 'Emel tidak boleh melebihi 255 aksara.',
@@ -57,7 +58,7 @@ class PublicComplaintController extends Controller
             'alamat.max' => 'Alamat tidak boleh melebihi 200 aksara.',
             'kategori.required' => 'Jenis aduan diperlukan.',
             'huraian.required' => 'Penerangan diperlukan.',
-            'huraian.max' => 'Penerangan tidak boleh melebihi 500 aksara.',
+            'huraian.max' => 'Penerangan tidak boleh melebihi 1000 aksara.',
             'gambar.array' => 'Gambar mestilah dalam format yang betul.',
             'gambar.max' => 'Maksimum 10 gambar dibenarkan.',
             'gambar.*.image' => 'Semua fail yang dimuat naik mestilah imej.',

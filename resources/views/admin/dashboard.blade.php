@@ -124,7 +124,7 @@
 				</div>
 			</div>
 			<div class="p-6">
-				<div id="complaintsTrendChart" style="min-height: 300px;"></div>
+				<div id="complaintsTrendChart" style="min-height: 350px;"></div>
 			</div>
 		</div>
 
@@ -143,22 +143,40 @@
 			</div>
 			<div class="p-6">
 				@if($categoryStats->count() > 0)
-					<div class="space-y-3">
-						@foreach($categoryStats as $category)
-							<div class="flex items-center justify-between p-4 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
+					<div class="space-y-4">
+						@foreach($categoryStats as $index => $category)
+							<div class="group relative flex items-center justify-between p-5 rounded-xl bg-gradient-to-r from-gray-50 to-white hover:from-[#F0F7F0] hover:to-white border border-gray-100 hover:border-[#132A13]/20 hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02]" 
+							     style="animation: slideInUp 0.5s ease-out {{ $index * 0.1 }}s both;">
 								<div class="flex-1">
-									<p class="text-sm font-semibold text-gray-900 mb-1">{{ $category['name'] }}</p>
-									<div class="flex items-center gap-3">
-										<div class="flex-1 bg-gray-200 rounded-full h-2.5 max-w-[200px]">
-											<div class="bg-gradient-to-r from-[#132A13] to-[#2F4F2F] h-2.5 rounded-full transition-all duration-500" style="width: {{ $category['percentage'] }}%"></div>
+									<div class="flex items-center gap-2 mb-2">
+										<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[#132A13] to-[#2F4F2F] flex items-center justify-center shadow-md">
+											<span class="text-white font-bold text-xs">{{ $index + 1 }}</span>
 										</div>
-										<span class="text-xs font-bold text-gray-700">{{ $category['count'] }} aduan</span>
+										<p class="text-sm font-bold text-gray-900">{{ $category['name'] }}</p>
+									</div>
+									<div class="flex items-center gap-4">
+										<div class="flex-1 bg-gray-200 rounded-full h-3 max-w-md relative overflow-hidden shadow-inner">
+											<div class="bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] h-3 rounded-full transition-all duration-1000 ease-out relative" 
+											     style="width: {{ $category['percentage'] }}%">
+												<div class="absolute inset-0 bg-white/20 animate-shimmer"></div>
+											</div>
+										</div>
+										<div class="flex items-center gap-2">
+											<svg class="w-4 h-4 text-[#132A13]" fill="currentColor" viewBox="0 0 20 20">
+												<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
+												<path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"/>
+											</svg>
+											<span class="text-xs font-bold text-gray-700">{{ $category['count'] }}</span>
+										</div>
 									</div>
 								</div>
-								<div class="ml-4">
-									<span class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-[#F0F7F0] text-[#132A13] font-bold text-sm">
-										{{ $category['percentage'] }}%
-									</span>
+								<div class="ml-6">
+									<div class="relative">
+										<span class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] text-white font-bold text-base shadow-lg group-hover:shadow-xl transition-all duration-300 transform group-hover:scale-110">
+											{{ $category['percentage'] }}%
+										</span>
+										<div class="absolute -inset-0.5 bg-gradient-to-r from-[#132A13] to-[#2F4F2F] rounded-2xl blur opacity-30 group-hover:opacity-60 transition-opacity"></div>
+									</div>
 								</div>
 							</div>
 						@endforeach
@@ -287,6 +305,68 @@
 				</div>
 			@endif
 		</div>
+		
+		{{-- Pagination --}}
+		@if($recentComplaints->hasPages())
+			<div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+				<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+					{{-- Results Info --}}
+					<div class="text-sm text-gray-600">
+						Menunjukkan <span class="font-semibold text-gray-900">{{ $recentComplaints->firstItem() }}</span> 
+						hingga <span class="font-semibold text-gray-900">{{ $recentComplaints->lastItem() }}</span> 
+						daripada <span class="font-semibold text-gray-900">{{ $recentComplaints->total() }}</span> aduan
+					</div>
+
+					{{-- Pagination Links --}}
+					<div class="flex items-center gap-2">
+						{{-- Previous Button --}}
+						@if ($recentComplaints->onFirstPage())
+							<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+								</svg>
+							</span>
+						@else
+							<a href="{{ $recentComplaints->previousPageUrl() }}" class="px-3 py-2 text-sm font-medium text-[#132A13] bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] transition-colors">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+								</svg>
+							</a>
+						@endif
+
+						{{-- Page Numbers --}}
+						<div class="flex items-center gap-1">
+							@foreach ($recentComplaints->getUrlRange(1, $recentComplaints->lastPage()) as $page => $url)
+								@if ($page == $recentComplaints->currentPage())
+									<span class="px-4 py-2 text-sm font-bold text-white bg-[#132A13] border border-[#132A13] rounded-lg">
+										{{ $page }}
+									</span>
+								@else
+									<a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] hover:text-[#132A13] transition-colors">
+										{{ $page }}
+									</a>
+								@endif
+							@endforeach
+						</div>
+
+						{{-- Next Button --}}
+						@if ($recentComplaints->hasMorePages())
+							<a href="{{ $recentComplaints->nextPageUrl() }}" class="px-3 py-2 text-sm font-medium text-[#132A13] bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] transition-colors">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</a>
+						@else
+							<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</span>
+						@endif
+					</div>
+				</div>
+			</div>
+		@endif
 	</div>
 
 	@push('scripts')
@@ -299,71 +379,187 @@
 				data: @json($trendCounts)
 			}],
 			chart: {
-				type: 'line',
-				height: 300,
+				type: 'area',
+				height: 350,
 				toolbar: {
-					show: false
+					show: true,
+					tools: {
+						download: true,
+						selection: false,
+						zoom: false,
+						zoomin: false,
+						zoomout: false,
+						pan: false,
+						reset: false
+					}
 				},
 				zoom: {
 					enabled: false
+				},
+				animations: {
+					enabled: true,
+					easing: 'easeinout',
+					speed: 800,
+					animateGradually: {
+						enabled: true,
+						delay: 150
+					},
+					dynamicAnimation: {
+						enabled: true,
+						speed: 350
+					}
+				},
+				dropShadow: {
+					enabled: true,
+					top: 3,
+					left: 0,
+					blur: 4,
+					opacity: 0.1
 				}
 			},
 			dataLabels: {
 				enabled: true,
 				style: {
-					fontSize: '12px',
-					fontWeight: 600
-				}
+					fontSize: '11px',
+					fontWeight: 'bold',
+					colors: ['#132A13']
+				},
+				background: {
+					enabled: true,
+					foreColor: '#132A13',
+					borderRadius: 6,
+					padding: 6,
+					opacity: 0.9,
+					borderWidth: 1,
+					borderColor: '#132A13'
+				},
+				offsetY: -8
 			},
 			stroke: {
 				curve: 'smooth',
 				width: 3,
 				colors: ['#132A13']
 			},
+			fill: {
+				type: 'gradient',
+				gradient: {
+					shade: 'light',
+					type: 'vertical',
+					shadeIntensity: 0.5,
+					gradientToColors: ['#F0F7F0'],
+					inverseColors: false,
+					opacityFrom: 0.7,
+					opacityTo: 0.1,
+					stops: [0, 100]
+				}
+			},
 			xaxis: {
 				categories: @json($trendLabels),
 				labels: {
 					style: {
-						fontSize: '12px'
+						fontSize: '12px',
+						fontWeight: 600,
+						colors: '#6B7280'
 					},
 					rotate: -45,
-					rotateAlways: false
+					rotateAlways: false,
+					trim: true
+				},
+				axisBorder: {
+					show: true,
+					color: '#E5E7EB'
+				},
+				axisTicks: {
+					show: true,
+					color: '#E5E7EB'
 				}
 			},
 			yaxis: {
 				title: {
 					text: 'Bilangan Aduan',
 					style: {
-						fontSize: '12px'
+						fontSize: '13px',
+						fontWeight: 700,
+						color: '#132A13'
 					}
 				},
 				labels: {
 					style: {
-						fontSize: '12px'
+						fontSize: '12px',
+						fontWeight: 600,
+						colors: '#6B7280'
+					},
+					formatter: function (val) {
+						return Math.floor(val);
 					}
 				}
 			},
 			grid: {
-				borderColor: '#e5e7eb',
-				strokeDashArray: 4
+				show: true,
+				borderColor: '#E5E7EB',
+				strokeDashArray: 4,
+				position: 'back',
+				xaxis: {
+					lines: {
+						show: false
+					}
+				},
+				yaxis: {
+					lines: {
+						show: true
+					}
+				},
+				padding: {
+					top: 0,
+					right: 10,
+					bottom: 0,
+					left: 10
+				}
 			},
 			tooltip: {
+				enabled: true,
 				theme: 'light',
+				style: {
+					fontSize: '13px',
+					fontFamily: 'inherit'
+				},
+				x: {
+					show: true,
+					format: 'MMM yyyy'
+				},
 				y: {
 					formatter: function (val) {
 						return val + " aduan";
+					},
+					title: {
+						formatter: function (seriesName) {
+							return seriesName + ': ';
+						}
 					}
+				},
+				marker: {
+					show: true
+				},
+				fixed: {
+					enabled: false,
+					position: 'topRight'
 				}
 			},
 			colors: ['#132A13'],
 			markers: {
-				size: 5,
+				size: 6,
 				colors: ['#132A13'],
 				strokeColors: '#fff',
-				strokeWidth: 2,
+				strokeWidth: 3,
 				hover: {
-					size: 7
-				}
+					size: 8,
+					sizeOffset: 2
+				},
+				shape: 'circle',
+				discrete: []
+			},
+			legend: {
+				show: false
 			}
 		};
 
@@ -373,5 +569,59 @@
 		document.getElementById('complaintsTrendChart').innerHTML = '<div class="flex items-center justify-center h-full text-sm text-gray-500">Tiada data untuk dipaparkan</div>';
 		@endif
 	</script>
+	@endpush
+
+	@push('styles')
+	<style>
+		/* Slide In Up Animation */
+		@keyframes slideInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		/* Shimmer Animation for Progress Bars */
+		@keyframes shimmer {
+			0% {
+				transform: translateX(-100%);
+			}
+			100% {
+				transform: translateX(100%);
+			}
+		}
+
+		.animate-shimmer {
+			animation: shimmer 2s infinite;
+		}
+
+		/* Smooth hover transition for category cards */
+		.group:hover .absolute.inset-0 {
+			animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+		}
+
+		/* Custom scrollbar for better aesthetics */
+		.space-y-4::-webkit-scrollbar {
+			width: 6px;
+		}
+
+		.space-y-4::-webkit-scrollbar-track {
+			background: #f1f1f1;
+			border-radius: 10px;
+		}
+
+		.space-y-4::-webkit-scrollbar-thumb {
+			background: #132A13;
+			border-radius: 10px;
+		}
+
+		.space-y-4::-webkit-scrollbar-thumb:hover {
+			background: #2F4F2F;
+		}
+	</style>
 	@endpush
 @endsection
