@@ -66,14 +66,15 @@
                                 <input type="tel" 
                                        name="telefon" 
                                        id="telefon"
-                                       maxlength="20"
+                                       minlength="10"
+                                       maxlength="12"
                                        class="w-full pl-12 pr-4 py-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#132A13] focus:border-[#132A13] transition-all"
                                        placeholder="0123456789"
                                        required>
                             </div>
                             <div class="flex items-center justify-between mt-1">
-                                <p class="text-xs text-[#2F4F2F]/60">Hanya nombor dibenarkan (tanpa tanda sengkang)</p>
-                                <span id="telefon-count" class="text-xs text-[#2F4F2F]/60">0/20</span>
+                                <p class="text-xs text-[#2F4F2F]/60">10-12 digit (tanpa tanda sengkang)</p>
+                                <span id="telefon-count" class="text-xs text-[#2F4F2F]/60">0/12</span>
                             </div>
                             <div id="telefon-error" class="mt-1 text-sm text-red-600 hidden"></div>
             </div>
@@ -155,13 +156,13 @@
                             <textarea name="huraian" 
                                       id="huraian"
                                       rows="5"
-                                      maxlength="500"
+                                      maxlength="1000"
                                       class="w-full px-4 py-3.5 rounded-xl border-2 border-gray-200 bg-white text-sm focus:ring-2 focus:ring-[#132A13] focus:border-[#132A13] transition-all resize-none"
                                       placeholder="Terangkan aduan anda dengan terperinci..."
                                       required></textarea>
                             <div class="flex items-center justify-between mt-1">
                                 <p class="text-xs text-[#2F4F2F]/60">Sila berikan maklumat yang lengkap untuk memudahkan tindakan</p>
-                                <span id="huraian-count" class="text-xs text-[#2F4F2F]/60">0/500</span>
+                                <span id="huraian-count" class="text-xs text-[#2F4F2F]/60">0/1000</span>
                             </div>
                             <div id="huraian-error" class="mt-1 text-sm text-red-600 hidden"></div>
             </div>
@@ -271,17 +272,17 @@
         
         // Update character count
         const currentLength = this.value.length;
-        telefonCount.textContent = `${currentLength}/20`;
+        telefonCount.textContent = `${currentLength}/12`;
         
         // Validate
         telefonError.classList.add('hidden');
         telefonError.textContent = '';
-        this.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
+        this.classList.remove('border-red-500', 'ring-2', 'ring-red-200', 'border-green-500');
         this.classList.add('border-gray-200');
         
-        if (this.value.length > 20) {
-            this.value = this.value.substring(0, 20);
-            telefonCount.textContent = '20/20';
+        if (this.value.length > 12) {
+            this.value = this.value.substring(0, 12);
+            telefonCount.textContent = '12/12';
         }
         
         if (this.value && !/^[0-9]+$/.test(this.value)) {
@@ -289,6 +290,14 @@
             this.classList.remove('border-gray-200');
             telefonError.textContent = 'Nombor telefon hanya boleh mengandungi nombor.';
             telefonError.classList.remove('hidden');
+        } else if (this.value.length > 0 && this.value.length < 10) {
+            this.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+            this.classList.remove('border-gray-200');
+            telefonError.textContent = 'Nombor telefon mestilah sekurang-kurangnya 10 digit.';
+            telefonError.classList.remove('hidden');
+        } else if (this.value.length >= 10 && this.value.length <= 12) {
+            this.classList.add('border-green-500');
+            this.classList.remove('border-gray-200');
         }
     });
 
@@ -360,7 +369,7 @@
         }
     });
 
-    // Description validation - all characters, max 500
+    // Description validation - all characters, max 1000
     const huraianInput = document.getElementById('huraian');
     const huraianCount = document.getElementById('huraian-count');
     const huraianError = document.getElementById('huraian-error');
@@ -370,7 +379,7 @@
         
         // Update character count
         const currentLength = value.length;
-        huraianCount.textContent = `${currentLength}/500`;
+        huraianCount.textContent = `${currentLength}/1000`;
         
         // Validate
         huraianError.classList.add('hidden');
@@ -378,9 +387,9 @@
         this.classList.remove('border-red-500', 'ring-2', 'ring-red-200');
         this.classList.add('border-gray-200');
         
-        if (value.length > 500) {
-            this.value = value.substring(0, 500);
-            huraianCount.textContent = '500/500';
+        if (value.length > 1000) {
+            this.value = value.substring(0, 1000);
+            huraianCount.textContent = '1000/1000';
         }
     });
 
@@ -527,13 +536,20 @@
             telefonError.classList.remove('hidden');
             if (!firstErrorField) firstErrorField = telefon;
             errorMessages.push('Nombor telefon hanya boleh mengandungi nombor.');
-        } else if (telefon.value.length > 20) {
+        } else if (telefon.value.length < 10) {
             isValid = false;
             telefon.classList.add('border-red-500', 'ring-2', 'ring-red-200');
-            telefonError.textContent = 'Nombor telefon tidak boleh melebihi 20 aksara.';
+            telefonError.textContent = 'Nombor telefon mestilah sekurang-kurangnya 10 digit.';
             telefonError.classList.remove('hidden');
             if (!firstErrorField) firstErrorField = telefon;
-            errorMessages.push('Nombor telefon tidak boleh melebihi 20 aksara.');
+            errorMessages.push('Nombor telefon mestilah sekurang-kurangnya 10 digit.');
+        } else if (telefon.value.length > 12) {
+            isValid = false;
+            telefon.classList.add('border-red-500', 'ring-2', 'ring-red-200');
+            telefonError.textContent = 'Nombor telefon tidak boleh melebihi 12 digit.';
+            telefonError.classList.remove('hidden');
+            if (!firstErrorField) firstErrorField = telefon;
+            errorMessages.push('Nombor telefon tidak boleh melebihi 12 digit.');
         }
         
         // Validate email
@@ -602,13 +618,13 @@
             huraianError.classList.remove('hidden');
             if (!firstErrorField) firstErrorField = huraian;
             errorMessages.push('Huraian aduan diperlukan.');
-        } else if (huraian.value.length > 500) {
+        } else if (huraian.value.length > 1000) {
             isValid = false;
             huraian.classList.add('border-red-500', 'ring-2', 'ring-red-200');
-            huraianError.textContent = 'Huraian tidak boleh melebihi 500 aksara.';
+            huraianError.textContent = 'Huraian tidak boleh melebihi 1000 aksara.';
             huraianError.classList.remove('hidden');
             if (!firstErrorField) firstErrorField = huraian;
-            errorMessages.push('Huraian tidak boleh melebihi 500 aksara.');
+            errorMessages.push('Huraian tidak boleh melebihi 1000 aksara.');
         }
         
         // Validate images
