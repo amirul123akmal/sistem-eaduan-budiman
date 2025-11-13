@@ -99,9 +99,9 @@
                         </div>
                         <label class="text-sm font-semibold text-[#132A13]">Huraian Aduan</label>
                     </div>
-                    <p class="text-gray-800 leading-relaxed whitespace-pre-wrap">
-                        {{ $complaint->description }}
-                    </p>
+                    <div class="text-gray-800 leading-relaxed text-justify break-words" style="text-align: justify; word-wrap: break-word; overflow-wrap: break-word;">
+                        {!! nl2br(e($complaint->description)) !!}
+                    </div>
                 </div>
 
                 {{-- Gambar Aduan --}}
