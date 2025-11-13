@@ -14,9 +14,8 @@ class AktivitiController extends Controller
      */
     public function index()
     {
-        $data = A::fetching('/aktiviti');
+        $data = A::get('/aktiviti');
         $activities = $data->aktiviti ?? [];
-        // dd($activities[0]->activity_date);
         return view('admin.websites.aktiviti.index', compact('activities'));
     }
 
