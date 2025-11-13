@@ -8,6 +8,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+use App\ApiHelper;
+
 class BizHubController extends Controller
 {
     protected ProjectBApiService $apiService;
@@ -22,31 +24,9 @@ class BizHubController extends Controller
      */
     public function index(Request $request): View
     {
-        $page = $request->get('page', 1);
-        $search = $request->get('search', '');
-        
-        $params = [
-            'page' => $page,
-            'per_page' => 10,
-        ];
-        
-        if ($search) {
-            $params['search'] = $search;
-        }
-
-        $response = $this->apiService->get('bizhub', $params);
-
-        if ($response['success']) {
-            $data = $response['data'];
-            $items = $data['data'] ?? [];
-            $pagination = $data['meta'] ?? [];
-        } else {
-            $items = [];
-            $pagination = [];
-            session()->flash('error', 'Gagal memuatkan data: ' . ($response['error'] ?? 'Unknown error'));
-        }
-
-        return view('admin.websites.bizhub.index', compact('items', 'pagination', 'search'));
+        $data = ApiHelper::get('/bizhub');
+        $items = $data->bizhub ?? [];
+        return view('admin.websites.bizhub.index', compact('items'));
     }
 
     /**
@@ -64,17 +44,26 @@ class BizHubController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
             'contact' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:500',
             'website' => 'nullable|url|max:255',
             'status' => 'nullable|in:active,inactive',
         ]);
+        $image = $request->file('image');
 
-        $response = $this->apiService->post('bizhub', $validated);
+        $data = [
+            'name' => $request->input('name'),
+            'description' => $request->input('description'),
+            'contact' => $request->input('contact'),
+            'address' => $request->input('address'),
+            'website' => $request->input('website'),
+            'status' => $request->input('status', 'active'),
+        ];
+
+        $response = ApiHelper::post('/bizhub', $data);
 
         if ($response['success']) {
-            return redirect()->route('admin.websites.bizhub.index')
+            return redirect()->route('admin.panel.websites.bizhub.index')
                 ->with('success', 'BizHub berjaya ditambah.');
         }
 
@@ -96,7 +85,7 @@ class BizHubController extends Controller
             abort(404, 'BizHub tidak dijumpai.');
         }
 
-        return view('admin.websites.bizhub.show', compact('item'));
+        return view('admin.panel.websites.bizhub.show', compact('item'));
     }
 
     /**

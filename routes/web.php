@@ -110,9 +110,9 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
     Route::get('audit-trails', [PanelAuditTrailController::class, 'index'])->name('audit-trails.index');
 
     Route::prefix('websites')->name('websites.')->group(function () {
-        Route::get('bizhub', [BizHubController::class, 'create']);
+        Route::resource('bizhub', BizHubController::class)->names('bizhub');
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
-        Route::resource('fasiliti', FasilitiController::class);
+        Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
         // Route::get('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
     });
 });

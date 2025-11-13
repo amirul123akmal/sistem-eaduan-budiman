@@ -16,7 +16,6 @@ class FasilitiController extends Controller
     {
         $data = ApiHelper::get('/fasiliti');
         $fasiliti = $data->fasiliti ?? [];
-        // dd( $fasiliti[1]->image_path );
         return view('admin.websites.fasiliti.index', compact('fasiliti'));
     }
 

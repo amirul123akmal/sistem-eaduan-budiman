@@ -24,9 +24,8 @@
             <label for="search" class="sr-only">Cari Aktiviti</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 dark:text-gray-500"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-gray-400 dark:text-gray-500" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="11" cy="11" r="8"></circle>
                         <path d="m21 21-4.3-4.3"></path>
                     </svg>
@@ -41,26 +40,19 @@
             <table class="min-w-full bg-white dark:bg-gray-900 rounded-lg overflow-hidden shadow-md">
                 <thead class="bg-gray-100 dark:bg-gray-800">
                     <tr>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             No.</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Gambar</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Nama Aktiviti</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Keterangan</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Tarikh</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Penandaan</th>
-                        <th
-                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                             Tindakan</th>
                     </tr>
                 </thead>
@@ -68,10 +60,7 @@
                     @foreach ($activities as $index => $activity)
                         @php
                             $images = array_filter(explode(',', $activity->image_path));
-                            $imagePaths = array_map(
-                                fn($img) => config('app.website_url') . '/storage/' . trim($img),
-                                $images,
-                            );
+                            $imagePaths = array_map(fn($img) => config('app.website_url') . '/storage/' . trim($img), $images);
                         @endphp
                         <tr>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
@@ -83,38 +72,32 @@
                                 <div
                                     class="w-36 h-24 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 relative group carousel hover:shadow-lg transition">
                                     @if (!empty($imagePaths))
-                                        <div class="carousel-container flex transition-transform duration-300 h-full"
-                                            data-index="0">
+                                        <div class="carousel-container flex transition-transform duration-300 h-full" data-index="0">
                                             @foreach ($imagePaths as $img)
-                                                <img src="{{ $img }}" alt="Gambar Aktiviti"
-                                                    class="w-full h-full object-cover flex-shrink-0">
+                                                <img src="{{ $img }}" alt="Gambar Aktiviti" class="w-full h-full object-cover flex-shrink-0">
                                             @endforeach
                                         </div>
 
                                         @if (count($imagePaths) > 1)
                                             <button
                                                 class="carousel-btn-prev absolute left-0 top-1/2 -translate-y-1/2 p-1 bg-black/40 hover:bg-black/70 text-white opacity-0 group-hover  carousel transition-opacity rounded-r-lg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                     <path d="m15 18-6-6 6-6" />
                                                 </svg>
                                             </button>
                                             <button
                                                 class="carousel-btn-next absolute right-0 top-1/2 -translate-y-1/2 p-1 bg-black/40 hover:bg-black/70 text-white opacity-0 group-hover  carousel transition-opacity rounded-l-lg">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24"
-                                                    fill="none" stroke="currentColor" stroke-width="2"
-                                                    stroke-linecap="round" stroke-linejoin="round">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none"
+                                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                     <path d="m9 18 6-6-6-6" />
                                                 </svg>
                                             </button>
-                                            <div
-                                                class="absolute bottom-1 right-1 text-xs px-1 bg-black/50 text-white rounded carousel-indicator">
+                                            <div class="absolute bottom-1 right-1 text-xs px-1 bg-black/50 text-white rounded carousel-indicator">
                                                 1/{{ count($imagePaths) }}
                                             </div>
                                         @else
-                                            <div
-                                                class="absolute bottom-1 right-1 text-xs px-1 bg-black/50 text-white rounded">
+                                            <div class="absolute bottom-1 right-1 text-xs px-1 bg-black/50 text-white rounded">
                                                 1/1
                                             </div>
                                         @endif
