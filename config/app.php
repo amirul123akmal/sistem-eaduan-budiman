@@ -3,6 +3,7 @@
 return [
     // Custom .env viariables
     'website_api_url' => env('WEBSITE_API_URL', 'https://api.example.com'),
+    'website_url' => env('WEBSITE_URL', 'https://example.com'),
 
     // Standard .env variables
     'name' => env('APP_NAME', 'Laravel'),
