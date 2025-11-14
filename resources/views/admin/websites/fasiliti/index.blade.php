@@ -82,8 +82,8 @@
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">
                                 https://maps.app.goo.gl/3oW4CZYR2sET5oxQ6</td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                {{-- <a href="{{ route('admin.fasiliti.edit', 1) }}"
-                                    class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a> --}}
+                                <a href="{{ route('admin.panel.websites.fasiliti.edit', ['fasiliti' => $row->facilityID]) }}"
+                                    class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</a>
                                 <form action="{{ route('admin.panel.websites.fasiliti.destroy', ['fasiliti' => $row->facilityID]) }}" method="POST"
                                     class="inline">
                                     @csrf
