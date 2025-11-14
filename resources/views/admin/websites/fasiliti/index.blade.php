@@ -89,7 +89,7 @@
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="text-red-600 hover:text-red-900"
-                                        onclick="return confirm('Adakah anda pasti mahu memadam ahli jawatankuasa ini?')">Padam</button>
+                                        onclick="return confirm('Adakah anda pasti mahu memadam fasiliti ini?')">Padam</button>
                                 </form>
                             </td>
                         </tr>
