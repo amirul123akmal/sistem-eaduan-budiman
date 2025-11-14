@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\Panel\AuditTrailController as PanelAuditTrailCont
 use App\Http\Controllers\Admin\Websites\BizHubController;
 use App\Http\Controllers\Admin\Websites\AktivitiController;
 use App\Http\Controllers\Admin\Websites\FasilitiController;
+use App\Http\Controllers\Admin\Websites\AhliJawatanKuasaController as AJKController;
 
 // Landing page - show login page, redirect authenticated users to dashboard
 Route::get('/', function () {
@@ -27,7 +28,7 @@ Route::get('/', function () {
     if (Auth::check()) {
         /** @var User|null $user */
         $user = Auth::user();
-        
+
         if ($user && method_exists($user, 'hasRole')) {
             if ($user->hasRole('Super Admin')) {
                 return redirect()->route('admin.dashboard');
@@ -36,11 +37,11 @@ Route::get('/', function () {
                 return redirect()->route('admin.panel.dashboard');
             }
         }
-        
+
         // Fallback for authenticated users without admin roles
         return redirect()->route('dashboard');
     }
-    
+
     // Show login page for guests
     return app(AuthenticatedSessionController::class)->create();
 });
@@ -57,7 +58,7 @@ Route::get('/dashboard', function () {
             return redirect()->route('admin.panel.dashboard');
         }
     }
-    
+
     // Fallback for non-admin users (if any)
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
@@ -89,10 +90,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
 
     // Websites Management (Project B Integration)
     // Route::prefix('websites')->name('websites.')->group(function () {
-        // Route::resource('bizhub', [BizHubController::class, 'create']);
-        // Route::resource('aktiviti', AktivitiController::class);
-        // Route::resource('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
-        // Route::resource('fasiliti', FasilitiController::class);
+    // Route::resource('bizhub', [BizHubController::class, 'create']);
+    // Route::resource('aktiviti', AktivitiController::class);
+    // Route::resource('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
+    // Route::resource('fasiliti', FasilitiController::class);
     // });
 });
 
@@ -113,7 +114,7 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
         Route::resource('bizhub', BizHubController::class)->names('bizhub');
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
         Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
-        // Route::get('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
+        Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
     });
 });
 
@@ -141,5 +142,5 @@ Route::get('/user/status-aduan/{complaint}', [PublicComplaintController::class, 
 // });
 
 
-require __DIR__.'/auth.php';
-require __DIR__.'/admin_auth.php';
+require __DIR__ . '/auth.php';
+require __DIR__ . '/admin_auth.php';
