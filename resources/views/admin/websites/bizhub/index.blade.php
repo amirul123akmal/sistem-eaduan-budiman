@@ -119,17 +119,7 @@
                             </td>
                             <td class="whitespace-nowrap px-6 py-4 text-right">
                                 <div class="flex items-center justify-end gap-2">
-                                    {{-- <a href="{{ route('admin.panel.websites.bizhub.show', $item['id']) }}"
-                                        class="inline-flex items-center gap-1.5 rounded-lg bg-[#132A13] px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#2F4F2F] transition-all hover:scale-105 transform">
-                                        <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"></path>
-                                            <path fill-rule="evenodd"
-                                                d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        Lihat
-                                    </a>
-                                    <a href="{{ route('admin.panel.websites.bizhub.edit', $item['id']) }}"
+                                    <a href="{{ route('admin.panel.websites.bizhub.edit', $item->vendorID) }}"
                                         class="inline-flex items-center gap-1.5 rounded-lg border-2 border-[#F0F7F0] bg-[#F0F7F0] px-3 py-1.5 text-xs font-semibold text-[#132A13] shadow-sm hover:bg-[#F0F7F0] transition-all hover:scale-105 transform">
                                         <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                             <path
@@ -137,7 +127,14 @@
                                             </path>
                                         </svg>
                                         Edit
-                                    </a> --}}
+                                    </a>
+                                        <form action="{{ route('admin.panel.websites.bizhub.destroy', ['bizhub' => $item->vendorID]) }}" method="POST"
+                                        class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900"
+                                            onclick="return confirm('Adakah anda pasti mahu memadam bisnes ini?')">Padam</button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

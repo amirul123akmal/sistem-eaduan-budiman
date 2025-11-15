@@ -33,7 +33,6 @@ class FasilitiController extends Controller
     public function store(Request $request)
     {
         $image = $request->file('gambar');
-        // dd($request->all(), base64_encode($image->get()));
         $data = [
             'name' => $request->input('nama'),
             'description' => $request->input('description'),
@@ -58,7 +57,9 @@ class FasilitiController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = ApiHelper::get('/fasiliti/' . $id);
+        $fasiliti = $data->facility ?? null;
+        return view('admin.websites.fasiliti.edit', compact('fasiliti'));
     }
 
     /**
@@ -66,7 +67,19 @@ class FasilitiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $data = [
+            'name' => $request->input('nama'),
+            'description' => $request->input('description'),
+            'location' => $request->input('location'),
+        ];
+
+        if ($request->hasFile('gambar')) {
+            $image = $request->file('gambar');
+            $data['image_base64'] = base64_encode($image->get());
+        }
+
+        $feedback = ApiHelper::patch('/fasiliti/' . $id, $data);
+        return redirect()->route('admin.panel.websites.fasiliti.index')->with('success', 'Fasiliti berjaya dikemaskini.');
     }
 
     /**

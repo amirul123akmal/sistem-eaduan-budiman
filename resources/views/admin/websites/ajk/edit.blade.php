@@ -49,53 +49,39 @@
                 {{ session('error') }}
             </div>
         @endif
-        <form action="{{ route('admin.panel.websites.aktiviti.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('admin.panel.websites.ajk.update', ['ahli_jawatan_kuasa' => $item->memberID]) }}" method="POST"
+            enctype="multipart/form-data" class="space-y-6">
             @csrf
-            @method('POST')
-
+            @method('PATCH')
             <div>
-                <label for="nama_aktiviti" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama Aktiviti</label>
-                <input type="text" name="nama_aktiviti" id="nama_aktiviti"
+                <label for="nama" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama</label>
+                <input type="text" name="nama" id="nama"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
+                    required value="{{ $item->name }}">
             </div>
 
             <div>
-                <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Keterangan</label>
-                <textarea name="keterangan" id="keterangan" rows="4"
+                <label for="posisi" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Posisi</label>
+                <input type="text" name="posisi" id="posisi"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required></textarea>
+                    required value="{{ $item->position }}">
             </div>
 
             <div>
-                <label for="tarikh" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tarikh</label>
-                <input type="date" name="tarikh" id="tarikh"
+                <label for="contact_number" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Contact Number</label>
+                <input type="tel" name="contact_number" id="contact_number"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
+                    required value="{{ $item->phone_number }}">
             </div>
-
-            {{-- <div>
-                <label for="penandaan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Penandaan</label>
-                <select name="penandaan" id="penandaan"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
-                    <option value="">Pilih Penandaan</option>
-                    <option value="aktif">Aktif</option>
-                    <option value="tidak_aktif">Tidak Aktif</option>
-                </select>
-            </div> --}}
-
             <div>
-                <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gambar</label>
-                <input type="file" name="gambar[]" id="gambar" accept="image/*" multiple
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
-                <div class="mt-1 text-sm text-gray-500 dark:text-gray-300">Format yang disokong: JPG, JPEG, PNG. Saiz maksimum: 2MB setiap imej. Anda
-                    boleh memilih lebih daripada satu imej.</div>
+                <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gambar <span
+                        class="text-red-500 text-xs">*Upload any image will override the current image</span></label></label>
+                <input type="file" name="gambar" id="gambar" accept="image/*"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark">
+                <div class="mt-1 text-sm text-gray-500 dark:text-gray-300">Format yang disokong: JPG, JPEG, PNG. Saiz maksimum: 2MB.</div>
             </div>
-
             <div class="flex items-center justify-between">
-                <a href="{{ route('admin.panel.websites.aktiviti.index') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Kembali ke
+                <a href="{{ route('admin.panel.websites.ajk.index') }}" class="text-sm text-gray-600 dark:text-gray-400 hover:underline">Kembali ke
                     Senarai</a>
 
                 <button type="submit"
@@ -103,6 +89,7 @@
             </div>
 
         </form>
+
     </div>
 
     </div>

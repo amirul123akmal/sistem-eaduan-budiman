@@ -31,4 +31,10 @@ class ApiHelper
         $data = Http::delete(config('app.website_api_url') . $targetUrl, $payload);
         return json_decode($data->body());
     }
+
+    public static function patch($targetUrl, $payload)
+    {
+        $data = Http::patch(config('app.website_api_url') . $targetUrl, $payload);
+        return json_decode($data->body());
+    }
 }

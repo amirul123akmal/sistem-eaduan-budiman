@@ -44,25 +44,25 @@ class BizHubController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'contact' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:500',
-            'website' => 'nullable|url|max:255',
-            'status' => 'nullable|in:active,inactive',
+            'location' => 'nullable|string|max:255',
+            'phone' => 'required|string',
+            'service' => 'required|string',
+            'masa' => 'required|string|max:255',
         ]);
-        $image = $request->file('image');
+        $image = $request->file('gambar');
 
         $data = [
             'name' => $request->input('name'),
-            'description' => $request->input('description'),
-            'contact' => $request->input('contact'),
-            'address' => $request->input('address'),
-            'website' => $request->input('website'),
-            'status' => $request->input('status', 'active'),
+            'phone_number' => $request->input('phone'),
+            'service' => $request->input('service'),
+            'location' => $request->input('location'),
+            'operation_time' => $request->input('masa'),
+            'status' => 'Approved',
+            'image_base64' => $image ? base64_encode(file_get_contents($image->getRealPath())) : null,
         ];
 
         $response = ApiHelper::post('/bizhub', $data);
-
-        if ($response['success']) {
+        if ($response->message === 'BizHub vendor added successfully') {
             return redirect()->route('admin.panel.websites.bizhub.index')
                 ->with('success', 'BizHub berjaya ditambah.');
         }
@@ -75,32 +75,15 @@ class BizHubController extends Controller
     /**
      * Display the specified BizHub item.
      */
-    public function show(string $id): View
-    {
-        $response = $this->apiService->get("bizhub/{$id}");
-
-        if ($response['success']) {
-            $item = $response['data']['data'] ?? $response['data'];
-        } else {
-            abort(404, 'BizHub tidak dijumpai.');
-        }
-
-        return view('admin.panel.websites.bizhub.show', compact('item'));
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified BizHub item.
      */
     public function edit(string $id): View
     {
-        $response = $this->apiService->get("bizhub/{$id}");
-
-        if ($response['success']) {
-            $item = $response['data']['data'] ?? $response['data'];
-        } else {
-            abort(404, 'BizHub tidak dijumpai.');
-        }
-
+        $data = ApiHelper::get("/bizhub/{$id}");
+        $item = $data->vendor ?? null;
         return view('admin.websites.bizhub.edit', compact('item'));
     }
 
@@ -111,17 +94,34 @@ class BizHubController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'contact' => 'nullable|string|max:255',
-            'address' => 'nullable|string|max:500',
-            'website' => 'nullable|url|max:255',
-            'status' => 'nullable|in:active,inactive',
+            'location' => 'nullable|string|max:255',
+            'phone' => 'required|string',
+            'service' => 'required|string',
+            'masa' => 'required|string|max:255',
         ]);
 
-        $response = $this->apiService->put("bizhub/{$id}", $validated);
+        $image = $request->file('gambar');
 
-        if ($response['success']) {
-            return redirect()->route('admin.websites.bizhub.index')
+        $data = [
+            'name' => $request->input('name'),
+            'phone_number' => $request->input('phone'),
+            'service' => $request->input('service'),
+            'location' => $request->input('location'),
+            'operation_time' => $request->input('masa'),
+            'status' => 'Approved',
+        ];
+
+        if ($image) {
+            $data['image_base64'] = base64_encode(file_get_contents($image->getRealPath()));
+        }
+
+        $response = ApiHelper::patch("/bizhub/{$id}", $data);
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal memadam BizHub: ' . ($response['error'] ?? 'Unknown error'));
+        }
+
+        if ($response->message === "BizHub vendor updated successfully") {
+            return redirect()->route('admin.panel.websites.bizhub.index')
                 ->with('success', 'BizHub berjaya dikemaskini.');
         }
 
@@ -135,15 +135,11 @@ class BizHubController extends Controller
      */
     public function destroy(string $id): RedirectResponse
     {
-        $response = $this->apiService->delete("bizhub/{$id}");
-
-        if ($response['success']) {
-            return redirect()->route('admin.websites.bizhub.index')
-                ->with('success', 'BizHub berjaya dipadam.');
+        $response = ApiHelper::delete("/bizhub/{$id}");
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal memadam BizHub: ' . ($response['error'] ?? 'Unknown error'));
         }
 
-        return redirect()->back()
-            ->with('error', 'Gagal memadam BizHub: ' . ($response['error'] ?? 'Unknown error'));
+        return redirect()->route('admin.panel.websites.bizhub.index')->with('success', 'BizHub berjaya dipadam.');
     }
 }
-
