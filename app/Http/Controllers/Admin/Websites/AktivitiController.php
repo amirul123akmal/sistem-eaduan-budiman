@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\ApiHelper as A;
+use App\ApiHelper;
 
 class AktivitiController extends Controller
 {
@@ -32,7 +33,32 @@ class AktivitiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nama_aktiviti' => 'required|string|max:255',
+            'keterangan' => 'required|string',
+            'tarikh' => 'required|date',
+            'gambar.*' => 'required|image|mimes:jpg,jpeg,png',
+        ]);
+
+        $images = [];
+        if ($request->hasFile('gambar')) {
+            foreach ($request->file('gambar') as $image) {
+                $images[] = base64_encode(file_get_contents($image->getRealPath()));
+            }
+        }
+
+        $data = [
+            'title' => $request->input('nama_aktiviti'),
+            'description' => $request->input('keterangan'),
+            'date' => $request->input('tarikh'),
+            'images' => $images,
+        ];
+
+        $response = A::post('/aktiviti', $data);
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal Menambah Aktiviti baharu: ' . ($response->error ?? 'Unknown error'));
+        }
+        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya ditambah.');
     }
 
     /**
@@ -48,7 +74,9 @@ class AktivitiController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $data = ApiHelper::get("/aktiviti/{$id}");
+        $item = $data->activity ?? null;
+        return view('admin.websites.aktiviti.edit', compact('item'));
     }
 
     /**
@@ -56,7 +84,35 @@ class AktivitiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'nama_aktiviti' => 'required|string|max:255',
+            'keterangan' => 'required|string',
+            'tarikh' => 'required|date',
+            'gambar.*' => 'nullable|image|mimes:jpg,jpeg,png',
+        ]);
+
+        $images = [];
+        if ($request->hasFile('gambar')) {
+            foreach ($request->file('gambar') as $image) {
+                $images[] = base64_encode(file_get_contents($image->getRealPath()));
+            }
+        }
+
+        $data = [
+            'title' => $request->input('nama_aktiviti'),
+            'description' => $request->input('keterangan'),
+            'date' => $request->input('tarikh'),
+        ];
+
+        if (!empty($images)) {
+            $data['images'] = $images;
+        }
+
+        $response = A::patch("/aktiviti/{$id}", $data);
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal mengemas kini Aktiviti: ' . ($response->error ?? 'Unknown error'));
+        }
+        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya dikemas kini.');
     }
 
     /**
@@ -64,6 +120,10 @@ class AktivitiController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $response = ApiHelper::delete("/aktiviti/{$id}");
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal memadam Aktiviti: ' . ($response->error ?? 'Unknown error'));
+        }
+        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya dipadam.');
     }
 }

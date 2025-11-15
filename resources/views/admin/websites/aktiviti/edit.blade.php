@@ -49,29 +49,29 @@
                 {{ session('error') }}
             </div>
         @endif
-        <form action="{{ route('admin.panel.websites.aktiviti.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+        <form action="{{ route('admin.panel.websites.aktiviti.update', ['aktiviti' => $item->activityID]) }}" method="POST" enctype="multipart/form-data"
+            class="space-y-6">
             @csrf
-            @method('POST')
-
+            @method('PATCH')
             <div>
                 <label for="nama_aktiviti" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Nama Aktiviti</label>
                 <input type="text" name="nama_aktiviti" id="nama_aktiviti"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
+                    required value="{{ $item->title }}">
             </div>
 
             <div>
                 <label for="keterangan" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Keterangan</label>
                 <textarea name="keterangan" id="keterangan" rows="4"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required></textarea>
+                    required>{{ $item->description }}</textarea>
             </div>
 
             <div>
                 <label for="tarikh" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Tarikh</label>
                 <input type="date" name="tarikh" id="tarikh"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
+                    required value="{{ $item->activity_date ? \Carbon\Carbon::parse($item->activity_date)->format('Y-m-d') : '' }}">
             </div>
 
             {{-- <div>
@@ -86,10 +86,10 @@
             </div> --}}
 
             <div>
-                <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gambar</label>
+                <label for="gambar" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Gambar <span
+                        class="text-red-500 text-xs">*Upload any image will override the current image</span></label>
                 <input type="file" name="gambar[]" id="gambar" accept="image/*" multiple
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark"
-                    required>
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary focus:border-primary block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-dark dark:focus:border-primary-dark">
                 <div class="mt-1 text-sm text-gray-500 dark:text-gray-300">Format yang disokong: JPG, JPEG, PNG. Saiz maksimum: 2MB setiap imej. Anda
                     boleh memilih lebih daripada satu imej.</div>
             </div>
