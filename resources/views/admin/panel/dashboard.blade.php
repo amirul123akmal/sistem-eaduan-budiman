@@ -272,6 +272,68 @@
 				</div>
 			@endif
 		</div>
+		
+		{{-- Pagination --}}
+		@if($recentComplaints->hasPages())
+			<div class="bg-gray-50 px-6 py-4 border-t border-gray-200">
+				<div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+					{{-- Results Info --}}
+					<div class="text-sm text-gray-600">
+						Menunjukkan <span class="font-semibold text-gray-900">{{ $recentComplaints->firstItem() }}</span> 
+						hingga <span class="font-semibold text-gray-900">{{ $recentComplaints->lastItem() }}</span> 
+						daripada <span class="font-semibold text-gray-900">{{ $recentComplaints->total() }}</span> aduan
+					</div>
+
+					{{-- Pagination Links --}}
+					<div class="flex items-center gap-2">
+						{{-- Previous Button --}}
+						@if ($recentComplaints->onFirstPage())
+							<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+								</svg>
+							</span>
+						@else
+							<a href="{{ $recentComplaints->previousPageUrl() }}" class="px-3 py-2 text-sm font-medium text-[#132A13] bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] transition-colors">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+								</svg>
+							</a>
+						@endif
+
+						{{-- Page Numbers --}}
+						<div class="flex items-center gap-1">
+							@foreach ($recentComplaints->getUrlRange(1, $recentComplaints->lastPage()) as $page => $url)
+								@if ($page == $recentComplaints->currentPage())
+									<span class="px-4 py-2 text-sm font-bold text-white bg-[#132A13] border border-[#132A13] rounded-lg">
+										{{ $page }}
+									</span>
+								@else
+									<a href="{{ $url }}" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] hover:text-[#132A13] transition-colors">
+										{{ $page }}
+									</a>
+								@endif
+							@endforeach
+						</div>
+
+						{{-- Next Button --}}
+						@if ($recentComplaints->hasMorePages())
+							<a href="{{ $recentComplaints->nextPageUrl() }}" class="px-3 py-2 text-sm font-medium text-[#132A13] bg-white border border-gray-200 rounded-lg hover:bg-[#F0F7F0] transition-colors">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</a>
+						@else
+							<span class="px-3 py-2 text-sm font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-lg cursor-not-allowed">
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+								</svg>
+							</span>
+						@endif
+					</div>
+				</div>
+			</div>
+		@endif
 	</div>
 
 	@push('scripts')

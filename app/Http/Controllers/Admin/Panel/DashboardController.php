@@ -51,11 +51,10 @@ class DashboardController extends Controller
             ];
         });
 
-        // Recent Complaints (last 10)
+        // Recent Complaints (6 per page with pagination)
         $recentComplaints = Complaint::with('complaintType')
             ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get();
+            ->paginate(6);
 
         return view('admin.panel.dashboard', compact('stats', 'trendLabels', 'trendCounts', 'categoryStats', 'recentComplaints'));
     }

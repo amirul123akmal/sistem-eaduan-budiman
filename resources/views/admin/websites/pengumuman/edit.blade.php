@@ -4,14 +4,14 @@
     @php
         $user = auth()->user();
         $isSuperAdmin = $user && method_exists($user, 'hasRole') && $user->hasRole('Super Admin');
-        $indexRoute = $isSuperAdmin ? 'admin.websites.ajk.index' : 'admin.panel.websites.ajk.index';
-        $storeRoute = $isSuperAdmin ? 'admin.websites.ajk.store' : 'admin.panel.websites.ajk.store';
+        $indexRoute = $isSuperAdmin ? 'admin.websites.pengumuman.index' : 'admin.panel.websites.pengumuman.index';
+        $updateRoute = $isSuperAdmin ? 'admin.websites.pengumuman.update' : 'admin.panel.websites.pengumuman.update';
     @endphp
 
     {{-- Header with Back Button --}}
     <div class="mb-6">
         <div class="flex items-center gap-4 mb-6">
-            <a href="{{ route($indexRoute) }}"
+            <a href="#"
                 class="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-[#F0F7F0] text-[#132A13] shadow-sm transition-all duration-300 hover:bg-[#F0F7F0] hover:border-[#132A13] hover:shadow-md active:scale-95 touch-manipulation">
                 <svg class="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -21,9 +21,9 @@
         </div>
         <div>
             <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] bg-clip-text text-transparent">
-                Tambah Ahli Jawatan Kuasa
+                Kemaskini Pengumuman
             </h1>
-            <p class="text-sm sm:text-base text-gray-600">Isi maklumat ahli jawatan kuasa untuk ditambah ke dalam sistem</p>
+            <p class="text-sm sm:text-base text-gray-600">Kemaskini maklumat pengumuman dalam sistem</p>
         </div>
     </div>
 
@@ -31,52 +31,52 @@
     <div class="bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
         <div class="bg-gradient-to-r from-[#F0F7F0] to-[#F0F7F0]/80 px-6 py-4 border-b border-gray-200">
             <h2 class="text-xl font-bold text-[#132A13] flex items-center gap-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
                 </svg>
-                Daftar Ahli Jawatan Kuasa
+                Edit Pengumuman
             </h2>
         </div>
         <div class="p-6 sm:p-8">
-            <form action="{{ route($storeRoute) }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            <form action="#" method="POST" enctype="multipart/form-data" class="space-y-6">
                 @csrf
-                @method('POST')
+                @method('PATCH')
 
-                <!-- Nama -->
+                <!-- Tajuk -->
                 <div>
-                    <label for="nama" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Nama <span class="text-red-500">*</span>
+                    <label for="tajuk" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tajuk Pengumuman <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="nama" id="nama" placeholder="Masukkan nama ahli"
+                    <input type="text" name="tajuk" id="tajuk" placeholder="Masukkan tajuk pengumuman"
                         class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-white text-gray-900 placeholder-gray-400 focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all"
-                        required value="{{ old('nama') }}">
-                    @error('nama')
+                        required value="{{ old('tajuk', $item->title ?? '') }}">
+                    @error('tajuk')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Posisi -->
+                <!-- Kandungan -->
                 <div>
-                    <label for="posisi" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Posisi <span class="text-red-500">*</span>
+                    <label for="kandungan" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Kandungan <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="posisi" id="posisi" placeholder="Masukkan posisi/jawatan"
-                        class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-white text-gray-900 placeholder-gray-400 focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all"
-                        required value="{{ old('posisi') }}">
-                    @error('posisi')
+                    <textarea name="kandungan" id="kandungan" rows="6" placeholder="Masukkan kandungan pengumuman"
+                        class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-white text-gray-900 placeholder-gray-400 focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all resize-none"
+                        required>{{ old('kandungan', $item->content ?? $item->description ?? '') }}</textarea>
+                    @error('kandungan')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
 
-                <!-- Contact Number -->
+                <!-- Tarikh -->
                 <div>
-                    <label for="contact_number" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Nombor Telefon <span class="text-red-500">*</span>
+                    <label for="tarikh" class="block text-sm font-semibold text-gray-700 mb-2">
+                        Tarikh <span class="text-red-500">*</span>
                     </label>
-                    <input type="tel" name="contact_number" id="contact_number" placeholder="0112345678"
-                        class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-white text-gray-900 placeholder-gray-400 focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all"
-                        required value="{{ old('contact_number') }}">
-                    @error('contact_number')
+                    <input type="date" name="tarikh" id="tarikh"
+                        class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-white text-gray-900 focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all"
+                        required value="{{ old('tarikh', $item->date ? \Carbon\Carbon::parse($item->date)->format('Y-m-d') : ($item->announcement_date ? \Carbon\Carbon::parse($item->announcement_date)->format('Y-m-d') : '')) }}">
+                    @error('tarikh')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
@@ -84,10 +84,11 @@
                 <!-- Gambar -->
                 <div>
                     <label for="gambar" class="block text-sm font-semibold text-gray-700 mb-2">
-                        Gambar <span class="text-red-500">*</span>
+                        Gambar Pengumuman
+                        <span class="text-xs text-red-500 font-normal">(Upload gambar baharu akan menggantikan gambar semasa)</span>
                     </label>
                     <div class="relative">
-                        <input type="file" name="gambar" id="gambar" accept="image/*" required
+                        <input type="file" name="gambar" id="gambar" accept="image/*"
                             class="w-full rounded-xl border-2 border-gray-200 px-4 py-3 bg-gray-50 text-gray-900 text-sm focus:border-[#132A13] focus:ring-2 focus:ring-[#132A13]/20 focus:outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-[#F0F7F0] file:text-[#132A13] hover:file:bg-[#132A13] hover:file:text-white cursor-pointer">
                     </div>
                     <p class="mt-2 text-xs text-gray-500">Format yang disokong: JPG, JPEG, PNG. Saiz maksimum: 2MB.</p>
@@ -110,7 +111,7 @@
                             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                             </svg>
-                            <span>Simpan Ahli</span>
+                            <span>Kemaskini Pengumuman</span>
                         </div>
                     </button>
                 </div>
@@ -143,3 +144,4 @@
         </script>
     @endpush
 @endsection
+

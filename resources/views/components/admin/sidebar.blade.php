@@ -255,6 +255,21 @@
                     </span>
                     <span class="relative">Ahli Jawatan Kuasa</span>
                 </a>
+                <a href="{{ route('admin.websites.pengumuman.index') }}"
+                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.websites.pengumuman.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+                    @if (request()->routeIs('admin.websites.pengumuman.*'))
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        </div>
+                    @endif
+                    <span
+                        class="relative inline-flex h-5 w-5 items-center justify-center @if (request()->routeIs('admin.websites.pengumuman.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                        </svg>
+                    </span>
+                    <span class="relative">Pengumuman</span>
+                </a>
 
             </nav>
         </div>
