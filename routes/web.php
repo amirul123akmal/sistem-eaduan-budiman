@@ -89,12 +89,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
     Route::get('audit-trails', [AuditTrailController::class, 'index'])->name('audit-trails.index');
 
     // Websites Management (Project B Integration)
-    // Route::prefix('websites')->name('websites.')->group(function () {
-    // Route::resource('bizhub', [BizHubController::class, 'create']);
-    // Route::resource('aktiviti', AktivitiController::class);
-    // Route::resource('ahli-jawatan-kuasa', AhliJawatanKuasaController::class);
-    // Route::resource('fasiliti', FasilitiController::class);
-    // });
+    Route::prefix('websites')->name('websites.')->group(function () {
+        Route::resource('bizhub', BizHubController::class)->names('bizhub');
+        Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
+        Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
+        Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
+    });
 });
 
 // Normal Admin dashboard (limited panel)

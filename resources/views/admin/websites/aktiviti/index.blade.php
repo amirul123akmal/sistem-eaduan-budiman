@@ -20,7 +20,7 @@
         </div>
 
         <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100">Senarai Fasiliti Kampung</h2>
+            
             <a href="{{ route('admin.panel.websites.aktiviti.create') }}"
                 class="inline-block px-4 py-2 text-sm bg-secondary text-white rounded-lg shadow hover:bg-primary-dark transition duration-300 transform hover:scale-[1.02]">
                 Tambah Aktiviti Baharu

@@ -176,15 +176,15 @@
                     <span class="relative">Audit Trail</span>
                 </a>
 
-                {{-- Website Kg-Budiman --}}
+                {{-- Website sahaja --}}
                 <div class="mt-6 mb-3 px-3">
                     <h3 class="text-xs font-bold uppercase tracking-wider text-gray-500 flex items-center gap-2">
                         <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-                        <span>Kg-Budiman</span>
+                        <span>Website</span>
                         <div class="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
                     </h3>
                 </div>
-                <a href="{{ route('admin.panel.websites.bizhub.index') }}"
+                <a href="{{ route('admin.websites.bizhub.index') }}"
                     class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.websites.bizhub.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
                     @if (request()->routeIs('admin.websites.bizhub.*'))
                         <div
@@ -202,40 +202,58 @@
                             </path>
                         </svg>
                     </span>
-                    <span class="relative">BizHub Kg. Budiman</span>
+                    <span class="relative">Bizhub</span>
                 </a>
-                <a href="#"
-                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
-                    <span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
+                <a href="{{ route('admin.websites.aktiviti.index') }}"
+                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.websites.aktiviti.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+                    @if (request()->routeIs('admin.websites.aktiviti.*'))
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        </div>
+                    @endif
+                    <span
+                        class="relative inline-flex h-5 w-5 items-center justify-center @if (request()->routeIs('admin.websites.aktiviti.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
                         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
                                 d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
                                 clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    Aktiviti Kg. Budiman
+                    <span class="relative">Aktiviti</span>
                 </a>
-                <a href="#"
-                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
-                    <span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
-                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path
-                                d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
-                            </path>
-                        </svg>
-                    </span>
-                    Ahli Jawatan Kuasa
-                </a>
-                <a href="#"
-                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium text-gray-700 transition-all duration-200 hover:bg-[#F0F7F0] hover:text-[#132A13]">
-                    <span class="relative inline-flex h-5 w-5 items-center justify-center text-gray-500 group-hover:text-[#132A13]">
+                <a href="{{ route('admin.websites.fasiliti.index') }}"
+                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.websites.fasiliti.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+                    @if (request()->routeIs('admin.websites.fasiliti.*'))
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        </div>
+                    @endif
+                    <span
+                        class="relative inline-flex h-5 w-5 items-center justify-center @if (request()->routeIs('admin.websites.fasiliti.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
                         <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd"
                                 d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z"
                                 clip-rule="evenodd"></path>
                         </svg>
                     </span>
-                    Fasiliti
+                    <span class="relative">Fasiliti</span>
+                </a>
+                <a href="{{ route('admin.websites.ajk.index') }}"
+                    class="group relative flex items-center gap-3 rounded-xl py-2.5 px-4 text-sm font-medium transition-all duration-200 @if (request()->routeIs('admin.websites.ajk.*')) bg-gradient-to-r from-[#132A13] to-[#2F4F2F] text-white shadow-lg shadow-[#132A13]/30 @else text-gray-700 hover:bg-[#F0F7F0] hover:text-[#132A13] @endif">
+                    @if (request()->routeIs('admin.websites.ajk.*'))
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-white/0 to-white/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        </div>
+                    @endif
+                    <span
+                        class="relative inline-flex h-5 w-5 items-center justify-center @if (request()->routeIs('admin.websites.ajk.*')) text-white @else text-gray-500 group-hover:text-[#132A13] @endif">
+                        <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z">
+                            </path>
+                        </svg>
+                    </span>
+                    <span class="relative">Ahli Jawatan Kuasa</span>
                 </a>
 
             </nav>
