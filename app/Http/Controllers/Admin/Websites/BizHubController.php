@@ -7,7 +7,8 @@ use App\Services\ProjectBApiService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\ApiHelper;
 
 class BizHubController extends Controller
@@ -17,6 +18,22 @@ class BizHubController extends Controller
     public function __construct(ProjectBApiService $apiService)
     {
         $this->apiService = $apiService;
+    }
+
+    /**
+     * Get the correct route name based on user role.
+     */
+    protected function getRouteName(string $action): string
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if ($user && $user->hasRole('Super Admin')) {
+            return "admin.websites.bizhub.{$action}";
+        }
+
+        // Default to admin panel route
+        return "admin.panel.websites.bizhub.{$action}";
     }
 
     /**
@@ -63,7 +80,7 @@ class BizHubController extends Controller
 
         $response = ApiHelper::post('/bizhub', $data);
         if ($response->message === 'BizHub vendor added successfully') {
-            return redirect()->route('admin.panel.websites.bizhub.index')
+            return redirect()->route($this->getRouteName('index'))
                 ->with('success', 'BizHub berjaya ditambah.');
         }
 
@@ -121,7 +138,7 @@ class BizHubController extends Controller
         }
 
         if ($response->message === "BizHub vendor updated successfully") {
-            return redirect()->route('admin.panel.websites.bizhub.index')
+            return redirect()->route($this->getRouteName('index'))
                 ->with('success', 'BizHub berjaya dikemaskini.');
         }
 
@@ -137,9 +154,9 @@ class BizHubController extends Controller
     {
         $response = ApiHelper::delete("/bizhub/{$id}");
         if (property_exists($response, 'error')) {
-            return redirect()->back()->with('error', 'Gagal memadam BizHub: ' . ($response['error'] ?? 'Unknown error'));
+            return redirect()->back()->with('error', 'Gagal memadam BizHub: ' . ($response->error ?? 'Unknown error'));
         }
 
-        return redirect()->route('admin.panel.websites.bizhub.index')->with('success', 'BizHub berjaya dipadam.');
+        return redirect()->route($this->getRouteName('index'))->with('success', 'BizHub berjaya dipadam.');
     }
 }

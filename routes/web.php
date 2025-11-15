@@ -94,6 +94,15 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
         Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
         Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
+        Route::get('pengumuman', function () {
+            return view('admin.websites.pengumuman.index');
+        })->name('pengumuman.index');
+        Route::get('pengumuman/create', function () {
+            return view('admin.websites.pengumuman.create');
+        })->name('pengumuman.create');
+        Route::get('pengumuman/{pengumuman}/edit', function ($id) {
+            return view('admin.websites.pengumuman.edit', ['item' => (object)['announcementID' => $id]]);
+        })->name('pengumuman.edit');
     });
 });
 
@@ -115,6 +124,15 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
         Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
         Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
+        Route::get('pengumuman', function () {
+            return view('admin.websites.pengumuman.index');
+        })->name('pengumuman.index');
+        Route::get('pengumuman/create', function () {
+            return view('admin.websites.pengumuman.create');
+        })->name('pengumuman.create');
+        Route::get('pengumuman/{pengumuman}/edit', function ($id) {
+            return view('admin.websites.pengumuman.edit', ['item' => (object)['announcementID' => $id]]);
+        })->name('pengumuman.edit');
     });
 });
 
@@ -136,10 +154,7 @@ Route::get('/user/semak-status', [PublicComplaintController::class, 'checkStatus
 Route::get('/user/list-aduan', [PublicComplaintController::class, 'list'])->name('public.complaints.list');
 Route::get('/user/status-aduan/{complaint}', [PublicComplaintController::class, 'show'])->name('public.complaint.show');
 
-// Route::get('/test-mail', function () {
-//     Mail::to('shahizzulikhwan71@gmail.com')->send(new TestMail());
-//     return 'Email sent successfully';
-// });
+
 
 
 require __DIR__ . '/auth.php';

@@ -4,11 +4,28 @@ namespace App\Http\Controllers\Admin\Websites;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\ApiHelper;
 
 class AhliJawatanKuasaController extends Controller
 {
+    /**
+     * Get the correct route name based on user role.
+     */
+    protected function getRouteName(string $action): string
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if ($user && $user->hasRole('Super Admin')) {
+            return "admin.websites.ajk.{$action}";
+        }
+
+        // Default to admin panel route
+        return "admin.panel.websites.ajk.{$action}";
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -53,9 +70,9 @@ class AhliJawatanKuasaController extends Controller
 
         $responses = ApiHelper::post('/jawatan_kuasa', $data);
         if (property_exists($responses, 'error')) {
-            return redirect()->back()->with('error', 'Gagal memadam BizHub: ' . ($responses->error ?? 'Unknown error'));
+            return redirect()->back()->with('error', 'Gagal menambah Ahli Jawatan Kuasa: ' . ($responses->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.ajk.index')
+        return redirect()->route($this->getRouteName('index'))
             ->with('success', 'Ahli Jawatan Kuasa berjaya ditambah.');
     }
 
@@ -105,7 +122,7 @@ class AhliJawatanKuasaController extends Controller
         if (property_exists($responses, 'error')) {
             return redirect()->back()->with('error', 'Gagal mengemas kini Ahli Jawatan Kuasa: ' . ($responses->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.ajk.index')
+        return redirect()->route($this->getRouteName('index'))
             ->with('success', 'Ahli Jawatan Kuasa berjaya dikemas kini.');
     }
 
@@ -118,7 +135,7 @@ class AhliJawatanKuasaController extends Controller
         if (property_exists($response, 'error')) {
             return redirect()->back()->with('error', 'Gagal memadam Ahli Jawatan Kuasa: ' . ($response->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.ajk.index')
+        return redirect()->route($this->getRouteName('index'))
             ->with('success', 'Ahli Jawatan Kuasa berjaya dipadam.');
     }
 }

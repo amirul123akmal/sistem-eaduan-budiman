@@ -4,12 +4,29 @@ namespace App\Http\Controllers\Admin\Websites;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\ApiHelper as A;
 use App\ApiHelper;
 
 class AktivitiController extends Controller
 {
+    /**
+     * Get the correct route name based on user role.
+     */
+    protected function getRouteName(string $action): string
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if ($user && $user->hasRole('Super Admin')) {
+            return "admin.websites.aktiviti.{$action}";
+        }
+
+        // Default to admin panel route
+        return "admin.panel.websites.aktiviti.{$action}";
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -58,7 +75,7 @@ class AktivitiController extends Controller
         if (property_exists($response, 'error')) {
             return redirect()->back()->with('error', 'Gagal Menambah Aktiviti baharu: ' . ($response->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya ditambah.');
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Aktiviti berjaya ditambah.');
     }
 
     /**
@@ -112,7 +129,7 @@ class AktivitiController extends Controller
         if (property_exists($response, 'error')) {
             return redirect()->back()->with('error', 'Gagal mengemas kini Aktiviti: ' . ($response->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya dikemas kini.');
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Aktiviti berjaya dikemas kini.');
     }
 
     /**
@@ -124,6 +141,6 @@ class AktivitiController extends Controller
         if (property_exists($response, 'error')) {
             return redirect()->back()->with('error', 'Gagal memadam Aktiviti: ' . ($response->error ?? 'Unknown error'));
         }
-        return redirect()->route('admin.panel.websites.aktiviti.index')->with('success', 'Aktiviti berjaya dipadam.');
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Aktiviti berjaya dipadam.');
     }
 }

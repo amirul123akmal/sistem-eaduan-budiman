@@ -4,11 +4,28 @@ namespace App\Http\Controllers\Admin\Websites;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\ApiHelper;
 
 class FasilitiController extends Controller
 {
+    /**
+     * Get the correct route name based on user role.
+     */
+    protected function getRouteName(string $action): string
+    {
+        /** @var User|null $user */
+        $user = Auth::user();
+
+        if ($user && $user->hasRole('Super Admin')) {
+            return "admin.websites.fasiliti.{$action}";
+        }
+
+        // Default to admin panel route
+        return "admin.panel.websites.fasiliti.{$action}";
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -41,7 +58,10 @@ class FasilitiController extends Controller
             'image_base64' => base64_encode($image->get())
         ];
         $feedback = ApiHelper::post('/fasiliti', $data);
-        return redirect()->route('admin.panel.websites.fasiliti.index')->with('success', 'Fasiliti berjaya ditambah.');
+        if (property_exists($feedback, 'error')) {
+            return redirect()->back()->with('error', 'Gagal menambah Fasiliti: ' . ($feedback->error ?? 'Unknown error'));
+        }
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Fasiliti berjaya ditambah.');
     }
 
     /**
@@ -79,7 +99,10 @@ class FasilitiController extends Controller
         }
 
         $feedback = ApiHelper::patch('/fasiliti/' . $id, $data);
-        return redirect()->route('admin.panel.websites.fasiliti.index')->with('success', 'Fasiliti berjaya dikemaskini.');
+        if (property_exists($feedback, 'error')) {
+            return redirect()->back()->with('error', 'Gagal mengemaskini Fasiliti: ' . ($feedback->error ?? 'Unknown error'));
+        }
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Fasiliti berjaya dikemaskini.');
     }
 
     /**
@@ -87,7 +110,10 @@ class FasilitiController extends Controller
      */
     public function destroy(string $id)
     {
-        $data = ApiHelper::delete('/fasiliti/' . $id);
-        return redirect()->route('admin.panel.websites.fasiliti.index')->with('success', 'Fasiliti berjaya dipadam.');
+        $response = ApiHelper::delete('/fasiliti/' . $id);
+        if (property_exists($response, 'error')) {
+            return redirect()->back()->with('error', 'Gagal memadam Fasiliti: ' . ($response->error ?? 'Unknown error'));
+        }
+        return redirect()->route($this->getRouteName('index'))->with('success', 'Fasiliti berjaya dipadam.');
     }
 }
