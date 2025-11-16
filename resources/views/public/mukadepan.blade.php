@@ -84,13 +84,17 @@
                 </div>
 
                 {{-- Back Button --}}
-                <div class="flex justify-center mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-[#2F4F2F]/10">
+                <div class="flex flex-col items-center mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-[#2F4F2F]/10 gap-3">
                     <a href="{{ config('app.website_url') }}"
                         class="group flex items-center justify-center gap-2 xs:gap-3 sm:gap-3 px-4 py-2.5 xs:px-5 xs:py-3 sm:px-6 sm:py-3.5 md:px-8 md:py-4 rounded-lg sm:rounded-xl bg-[#F0F7F0]/80 backdrop-blur-sm text-[#132A13] shadow-md border border-[#2F4F2F]/20 transition-all duration-300 hover:bg-[#132A13] hover:text-white hover:shadow-lg active:scale-95 sm:hover:scale-105 touch-manipulation w-full sm:w-auto min-w-[200px]">
                         <svg class="w-4 h-4 xs:w-5 xs:h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                         </svg>
                         <span class="text-sm xs:text-base sm:text-lg font-medium whitespace-nowrap">Kembali ke Laman Utama</span>
+                    </a>
+                    <a href="{{ route('admin.login') }}" 
+                        class="text-xs text-[#2F4F2F]/60 hover:text-[#132A13] transition-colors duration-200 underline-offset-2 hover:underline">
+                        Go to Admin Dashboard
                     </a>
                 </div>
             </div>
