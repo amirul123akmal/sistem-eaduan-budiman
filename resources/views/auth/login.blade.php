@@ -115,8 +115,29 @@
                     </div>
                 </form>
 
+                {{-- Navigation Buttons --}}
+                <div class="mt-6 pt-6 border-t border-[#2F4F2F]/10">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <a href="{{ config('app.website_url') }}" 
+                            target="_blank"
+                            class="group flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-[#F0F7F0] bg-[#F0F7F0]/50 text-[#132A13] text-sm font-semibold shadow-sm transition-all duration-300 hover:bg-[#132A13] hover:text-white hover:border-[#132A13] hover:shadow-md active:scale-95 touch-manipulation">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                            </svg>
+                            <span>Laman Utama</span>
+                        </a>
+                        <a href="{{ route('public.home') }}" 
+                            class="group flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border-2 border-[#F0F7F0] bg-[#F0F7F0]/50 text-[#132A13] text-sm font-semibold shadow-sm transition-all duration-300 hover:bg-[#132A13] hover:text-white hover:border-[#132A13] hover:shadow-md active:scale-95 touch-manipulation">
+                            <svg class="w-4 h-4 transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            <span>Sistem e-Aduan</span>
+                        </a>
+                    </div>
+                </div>
+
                 {{-- Footer Info --}}
-                <div class="mt-8 pt-6 border-t border-[#2F4F2F]/10">
+                <div class="mt-6 pt-6 border-t border-[#2F4F2F]/10">
                     <p class="text-xs text-center text-[#2F4F2F]/60">
                         <i class="fa fa-shield-alt mr-1" aria-hidden="true"></i>
                         Akses terhad untuk kakitangan pentadbiran sahaja
