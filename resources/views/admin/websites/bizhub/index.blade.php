@@ -45,10 +45,7 @@
 
     {{-- Search & Filter --}}
     <div class="mb-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-[#F0F7F0] to-white p-6 shadow-lg">
-        {{-- <form method="GET" action="{{ route('admin.panel.websites.bizhub.index') }}" class="flex gap-4"> --}}
-        <form method="POST" action="" class="flex gap-4">
-            @csrf
-            @method('POST')
+        <form id="searchForm" class="flex gap-4" onsubmit="return false;">
             <div class="flex-1">
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -58,31 +55,23 @@
                                 clip-rule="evenodd"></path>
                         </svg>
                     </div>
-                    <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari BizHub..."
+                    <input type="text" id="searchInput" name="search" placeholder="Cari BizHub (Nama, Telefon, Status)..."
                         class="w-full pl-10 rounded-xl border-2 border-gray-200 py-2.5 text-sm shadow-sm focus:border-[#132A13] focus:ring-[#132A13] transition-all">
                 </div>
             </div>
-            <button type="submit"
-                class="group relative overflow-hidden rounded-xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] px-6 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] transform">
-                <div
-                    class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                </div>
+            <button type="button" id="resetBtn" 
+                class="hidden group relative overflow-hidden rounded-xl border-2 border-gray-300 bg-white px-6 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-all duration-300">
                 <div class="relative flex items-center justify-center gap-2">
                     <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd"
-                            d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            clip-rule="evenodd"></path>
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>
-                    Cari
+                    <span>Reset</span>
                 </div>
             </button>
-            @if (request('search'))
-                {{-- <a href="{{ route('admin.panel.websites.bizhub.index') }}"
-                    class="rounded-xl border-2 border-gray-300 bg-white px-6 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 transition-all">
-                    Reset
-                </a> --}}
-            @endif
         </form>
+        <div id="searchResults" class="mt-3 text-sm text-gray-600 hidden">
+            <span id="resultCount" class="font-semibold text-[#132A13]">0</span> hasil ditemui
+        </div>
     </div>
 
     {{-- Data Table --}}
@@ -99,9 +88,13 @@
                             <th class="px-4 sm:px-6 py-4 text-right text-xs font-bold uppercase tracking-wider text-gray-700">Tindakan</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-200 bg-white">
+                    <tbody id="bizhubTableBody" class="divide-y divide-gray-200 bg-white">
                         @foreach ($items as $index => $item)
-                            <tr class="hover:bg-[#F0F7F0]/50 transition-colors">
+                            <tr class="bizhub-row hover:bg-[#F0F7F0]/50 transition-colors"
+                                data-name="{{ strtolower($item->name ?? '') }}"
+                                data-phone="{{ strtolower($item->phone_number ?? '') }}"
+                                data-status="{{ strtolower($item->status ?? '') }}"
+                                data-description="{{ strtolower($item->description ?? '') }}">
                                 <td class="whitespace-nowrap px-4 sm:px-6 py-4">
                                     <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-[#F0F7F0] text-[#132A13] font-bold text-sm">
                                         {{ ($pagination['current_page'] ?? 1) * 10 - 10 + $loop->iteration }}
@@ -173,6 +166,23 @@
                         @endforeach
                     </tbody>
                 </table>
+            </div>
+            {{-- No Results Message (Hidden by default) --}}
+            <div id="noResultsMessage" class="hidden px-6 py-16 text-center">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#F0F7F0] to-[#F0F7F0]/50 flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">Tiada Hasil Ditemui</h3>
+                <p class="text-sm text-gray-500 mb-6">Tiada BizHub yang sepadan dengan carian anda.</p>
+                <button type="button" id="clearSearchBtn"
+                    class="inline-flex items-center gap-2 rounded-xl border-2 border-gray-300 bg-white px-6 py-2.5 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-all">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    <span>Kosongkan Carian</span>
+                </button>
             </div>
         @else
             <div class="px-6 py-16 text-center">
@@ -291,8 +301,94 @@
                 });
             @endif
 
-            // SweetAlert2 confirmation for delete action
+            // Search and Filter Functionality
             document.addEventListener('DOMContentLoaded', function() {
+                const searchInput = document.getElementById('searchInput');
+                const resetBtn = document.getElementById('resetBtn');
+                const clearSearchBtn = document.getElementById('clearSearchBtn');
+                const searchResults = document.getElementById('searchResults');
+                const resultCount = document.getElementById('resultCount');
+                const noResultsMessage = document.getElementById('noResultsMessage');
+                const tableBody = document.getElementById('bizhubTableBody');
+                const tableContainer = tableBody ? tableBody.closest('.overflow-x-auto') : null;
+
+                function filterTable() {
+                    const searchTerm = searchInput.value.toLowerCase().trim();
+                    const rows = document.querySelectorAll('.bizhub-row');
+                    let visibleCount = 0;
+
+                    if (!rows.length) return;
+
+                    rows.forEach(row => {
+                        const name = row.getAttribute('data-name') || '';
+                        const phone = row.getAttribute('data-phone') || '';
+                        const status = row.getAttribute('data-status') || '';
+                        const description = row.getAttribute('data-description') || '';
+
+                        const matches = searchTerm === '' || 
+                            name.includes(searchTerm) || 
+                            phone.includes(searchTerm) || 
+                            status.includes(searchTerm) || 
+                            description.includes(searchTerm);
+
+                        if (matches) {
+                            row.style.display = '';
+                            visibleCount++;
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+
+                    // Show/hide reset button
+                    if (searchTerm) {
+                        resetBtn.classList.remove('hidden');
+                        searchResults.classList.remove('hidden');
+                        resultCount.textContent = visibleCount;
+                    } else {
+                        resetBtn.classList.add('hidden');
+                        searchResults.classList.add('hidden');
+                    }
+
+                    // Show/hide no results message
+                    if (visibleCount === 0 && searchTerm) {
+                        if (tableContainer) tableContainer.style.display = 'none';
+                        noResultsMessage.classList.remove('hidden');
+                    } else {
+                        if (tableContainer) tableContainer.style.display = '';
+                        noResultsMessage.classList.add('hidden');
+                    }
+                }
+
+                // Search input event listener
+                if (searchInput) {
+                    searchInput.addEventListener('input', filterTable);
+                    searchInput.addEventListener('keyup', function(e) {
+                        if (e.key === 'Escape') {
+                            searchInput.value = '';
+                            filterTable();
+                        }
+                    });
+                }
+
+                // Reset button event listener
+                if (resetBtn) {
+                    resetBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        filterTable();
+                        searchInput.focus();
+                    });
+                }
+
+                // Clear search button in no results message
+                if (clearSearchBtn) {
+                    clearSearchBtn.addEventListener('click', function() {
+                        searchInput.value = '';
+                        filterTable();
+                        searchInput.focus();
+                    });
+                }
+
+                // SweetAlert2 confirmation for delete action
                 const deleteButtons = document.querySelectorAll('.delete-bizhub-btn');
                 
                 deleteButtons.forEach(button => {
