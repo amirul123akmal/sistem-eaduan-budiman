@@ -43,7 +43,7 @@
                                 <i class="fa fa-pencil-alt text-xl xs:text-2xl" aria-hidden="true"></i>
                             </div>
                             <div class="text-center">
-                                <h3 class="text-base xs:text-lg font-bold mb-1">Tambah Aduan</h3>
+                                <h3 class="text-base xs:text-lg font-bold mb-1">Borang Aduan</h3>
                                 <p class="text-xs xs:text-sm text-white/90">Buat aduan baharu</p>
                             </div>
                         </div>
