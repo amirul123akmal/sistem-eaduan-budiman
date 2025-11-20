@@ -13,7 +13,8 @@
         <div class="flex items-center gap-4 mb-6">
             <a href="{{ $isSuperAdmin ? route('admin.dashboard') : route('admin.panel.dashboard') }}"
                 class="group flex items-center gap-2 px-4 py-2 rounded-xl bg-white border-2 border-[#F0F7F0] text-[#132A13] shadow-sm transition-all duration-300 hover:bg-[#F0F7F0] hover:border-[#132A13] hover:shadow-md active:scale-95 touch-manipulation">
-                <svg class="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="w-5 h-5 transition-transform duration-300 group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
                 <span class="font-medium">Kembali</span>
@@ -21,14 +22,16 @@
         </div>
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] bg-clip-text text-transparent">
+                <h1
+                    class="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 bg-gradient-to-r from-[#132A13] via-[#2F4F2F] to-[#132A13] bg-clip-text text-transparent">
                     Pengumuman
                 </h1>
                 <p class="text-sm sm:text-base text-gray-600">Urus pengumuman dan maklumat penting untuk penduduk Kampung Budiman</p>
             </div>
             <a href="{{ route($createRoute) }}"
                 class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] px-5 py-3 sm:px-6 sm:py-3.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-95 transform touch-manipulation">
-                <div class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div
+                    class="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 </div>
                 <div class="relative flex items-center justify-center gap-2">
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -58,23 +61,71 @@
 
     {{-- Data Table --}}
     <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
-        <div class="px-6 py-16 text-center">
-            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-[#F0F7F0] to-[#F0F7F0]/50 flex items-center justify-center mx-auto mb-4">
-                <svg class="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
-                </svg>
-            </div>
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Tiada Pengumuman</h3>
-            <p class="text-sm text-gray-500 mb-6">Mula dengan menambah pengumuman baharu.</p>
-            <a href="{{ route($createRoute) }}"
-                class="inline-flex items-center gap-2 rounded-2xl bg-gradient-to-br from-[#132A13] to-[#2F4F2F] px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02] active:scale-95 transform touch-manipulation">
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                        clip-rule="evenodd"></path>
-                </svg>
-                Tambah Pengumuman
-            </a>
-        </div>
+        <table class="w-full">
+            <thead>
+                <tr class="border-b border-gray-200 bg-gradient-to-r from-[#F0F7F0] to-white">
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tajuk</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Kandungan</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tarikh Mula</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Tarikh Tamat</th>
+                    <th class="px-6 py-4 text-left text-sm font-semibold text-gray-900">Imej</th>
+                    <th class="px-6 py-4 text-right text-sm font-semibold text-gray-900">Tindakan</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    // Choose the collection variable that your controller provides
+                    $collection = $pengumumans ?? ($pengumumanItems ?? []);
+                    $editRoute = $isSuperAdmin ? 'admin.websites.pengumuman.edit' : 'admin.panel.websites.pengumuman.edit';
+                    $destroyRoute = $isSuperAdmin ? 'admin.websites.pengumuman.destroy' : 'admin.panel.websites.pengumuman.destroy';
+                @endphp
+
+                @forelse($asdasd as $pengumuman)
+                    <tr class="border-b border-gray-100 hover:bg-[#F0F7F0]/50 transition-colors">
+                        <td class="px-6 py-4 text-sm text-gray-900">{{ $pengumuman->title ?? '—' }}</td>
+
+                        <td class="px-6 py-4 text-sm text-gray-600 max-w-xl">
+                            <div class="text-sm text-gray-600 line-clamp-2">
+                                {{ \Illuminate\Support\Str::limit(strip_tags($pengumuman->content ?? ($pengumuman->kandungan ?? '')), 120) }}
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ $pengumuman->start_date ? \Carbon\Carbon::parse($pengumuman->start_date)->format('d F Y') : '-' }}
+                        </td>
+
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            {{ $pengumuman->end_date ? \Carbon\Carbon::parse($pengumuman->end_date)->format('d F Y') : '-' }}
+                        </td>
+
+                        <td class="px-6 py-4 text-sm text-gray-600">
+                            <div class="w-20 h-12 overflow-hidden rounded-md border border-gray-200">
+                                <img src="{{ config('app.website_url') }}/storage/{{ $pengumuman->image_path }}" alt="Imej Pengumuman"
+                                    class="w-full h-full object-cover">
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-right text-sm">
+                            {{-- <a href="{{ route($editRoute, $pengumuman->id ?? $pengumuman) }}" --}}
+                            <a href="{{ route('asdasd.edit', ['pengumuman' => $pengumuman->announcementID]) }}"
+                                class="text-[#132A13] hover:text-[#2F4F2F] font-medium mr-4">Edit</a>
+
+                            <form action="{{ route('asdasd.destroy', ['pengumuman' => $pengumuman->announcementID]) }}" method="POST"
+                                class="inline-block" onsubmit="return confirm('Padam pengumuman ini?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-medium">Padam</button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">
+                            Tiada pengumuman ditemui.
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
     @push('scripts')
@@ -102,4 +153,3 @@
         </script>
     @endpush
 @endsection
-
