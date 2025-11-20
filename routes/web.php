@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\Websites\BizHubController;
 use App\Http\Controllers\Admin\Websites\AktivitiController;
 use App\Http\Controllers\Admin\Websites\FasilitiController;
 use App\Http\Controllers\Admin\Websites\AhliJawatanKuasaController as AJKController;
+use App\Http\Controllers\Admin\Websites\AnnouncementController as AnnouncementController;
 
 // Landing page - show login page, redirect authenticated users to dashboard
 Route::get('/', function () {
@@ -94,15 +95,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'role:Super Admin'])
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
         Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
         Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
-        Route::get('pengumuman', function () {
-            return view('admin.websites.pengumuman.index');
-        })->name('pengumuman.index');
-        Route::get('pengumuman/create', function () {
-            return view('admin.websites.pengumuman.create');
-        })->name('pengumuman.create');
-        Route::get('pengumuman/{pengumuman}/edit', function ($id) {
-            return view('admin.websites.pengumuman.edit', ['item' => (object)['announcementID' => $id]]);
-        })->name('pengumuman.edit');
+        Route::resource('pengumuman', AnnouncementController::class)->names('pengumuman');
     });
 });
 
@@ -124,17 +117,13 @@ Route::prefix('admin/panel')->name('admin.panel.')->middleware(['auth', 'role:Ad
         Route::resource('aktiviti', AktivitiController::class)->names('aktiviti');
         Route::resource('fasiliti', FasilitiController::class)->names('fasiliti');
         Route::resource('ahli-jawatan-kuasa', AJKController::class)->names('ajk');
-        Route::get('pengumuman', function () {
-            return view('admin.websites.pengumuman.index');
-        })->name('pengumuman.index');
-        Route::get('pengumuman/create', function () {
-            return view('admin.websites.pengumuman.create');
-        })->name('pengumuman.create');
-        Route::get('pengumuman/{pengumuman}/edit', function ($id) {
-            return view('admin.websites.pengumuman.edit', ['item' => (object)['announcementID' => $id]]);
-        })->name('pengumuman.edit');
+        Route::resource('pengumuman', AnnouncementController::class)->names('pengumuman');
     });
 });
+
+// WORK IN PROGRESS!!!!!!!
+// DO NOT TOUCH THIS UNLESS THE PERMISSION IS WORKING FOR _PENGUMUMAN_
+Route::resource('pengumuman', AnnouncementController::class)->names('asdasd');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
